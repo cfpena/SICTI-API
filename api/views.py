@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
+from rest_framework import viewsets,filters
 from tokenapi.decorators import token_required
 from tokenapi.http import JsonResponse, JsonError
-from .serializers import UserSerializer, GroupSerializer
+from .serializers import *
+from .models import *
 
-@token_required
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -20,4 +21,15 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+class PersonaViewSet(viewsets.ModelViewSet):
+    #filter_backends = (filters.DjangoFilterBackend,)
+    #filter_fields = ('Nombre','Apellido','Email','Telefono','Genero')
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
+    queryset = Personas.objects.all()
+    serializer_class = PersonaSerializer
+
+
+
 # Create your views here.
