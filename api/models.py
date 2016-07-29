@@ -10,11 +10,11 @@ class Personas(models.Model):
         ('M', 'Masculino'),
         ('F', 'Femenino')
     )
-    CI = models.CharField(max_length=10)
+    CI = models.CharField(max_length=10,unique=True)
     Nombre = models.CharField(max_length=30)
     Apellido = models.CharField(max_length=30)
-    Email = models.EmailField(max_length=60)
-    Telefono = models.CharField(max_length=10)
+    Email = models.EmailField(max_length=60,unique=True)
+    Telefono = models.CharField(max_length=10,blank=True)
     Genero = models.CharField(
         max_length=2,
         choices= generoChoices ,
