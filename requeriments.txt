@@ -1,8 +1,8 @@
 Django
 djangorestframework
 markdown
+djangorestframework-jwt
 django-filter
 pygments
-django-tokenapi
 django-cors-headers
 Pillow
