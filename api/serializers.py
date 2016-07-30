@@ -13,9 +13,9 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ('name')
-
 class PersonaSerializer(serializers.HyperlinkedModelSerializer):
-    usuario = serializers.StringRelatedField()
+    usuario = UserSerializer()
+
     class Meta:
         model = Personas
         fields = '__all__'
