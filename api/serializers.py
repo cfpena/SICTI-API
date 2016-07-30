@@ -17,5 +17,10 @@ class PersonaSerializer(serializers.HyperlinkedModelSerializer):
     usuario = UserSerializer()
 
     class Meta:
-        model = Personas
+        model = Persona
+        fields = '__all__'
+
+class ItemSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Item
         fields = '__all__'

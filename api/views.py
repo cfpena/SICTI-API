@@ -30,15 +30,19 @@ class PersonaViewSet(viewsets.ModelViewSet):
     #filter_fields = ('Nombre','Apellido','Email','Telefono','Genero')
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
-    queryset = Personas.objects.all()
+    queryset = Persona.objects.all()
     serializer_class = PersonaSerializer
 class UsuarioViewSet(viewsets.ModelViewSet):
-    #filter_backends = (filters.DjangoFilterBackend,)
-    #filter_fields = ('Nombre','Apellido','Email','Telefono','Genero')
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
-    queryset = Personas.objects.all()
+    queryset = Persona.objects.all()
     serializer_class = PersonaSerializer
+
+class ItemViewSet(viewsets.ModelViewSet):
+    #filter_backends = (filters.SearchFilter,)
+    #search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
 
 
 # Create your views here.

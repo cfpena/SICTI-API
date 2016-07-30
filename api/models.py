@@ -10,7 +10,7 @@ solo_numeros = RegexValidator(r'^\d{1,10}$','Solo numeros')
 alfanumericos = RegexValidator(r'^[0-9a-zA-Z]*$','Solo alfanumericos')
 
 # Create your models here.
-class Personas(models.Model):
+class Persona(models.Model):
     generoChoices=(
         ('M', 'Masculino'),
         ('F', 'Femenino')
@@ -27,7 +27,8 @@ class Personas(models.Model):
     )
     usuario = models.ForeignKey(User,null=True)
 
-class Items(models.Model):
+class Item(models.Model):
+
     Codigo = models.CharField(max_length=10,unique=True, validators=[alfanumericos])
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
     Marca = models.CharField(max_length=20, blank=True, validators=[alfanumericos])
@@ -36,67 +37,67 @@ class Items(models.Model):
     Is_kit = models.BooleanField(default=False)
     Stock = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
     Images = models.ImageField(upload_to='items', blank=True)
-
-class Items_Detalle_Kits(models.Model):
+    items = models.ForeignKey('self',related_name='contenido', on_delete=models.CASCADE, null=True)
+class Item_Detalle_Kit(models.Model):
     Cantidad = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
-    fk_item = models.ForeignKey(Items,null=True)
+    fk_item = models.ForeignKey(Item,null=True)
 
 class Tipo_Identificacion(models.Model):
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
 
 class Item_Identicacion(models.Model):
     Valor = models.CharField(max_length=20, validators=[alfanumericos])
-    fk_item = models.ForeignKey(Items, null=True)
+    fk_item = models.ForeignKey(Item, null=True)
     fk_tipoIdentifacion = models.ForeignKey(Tipo_Identificacion, null=True)
 
 class Tipo_Movimiento(models.Model):
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
 
-class Movimientos(models.Model):
+class Movimiento(models.Model):
     Fecha = models.DateField(auto_now=True)
     fk_tipoMovimiento = models.ForeignKey(Tipo_Movimiento, null=True)
 
 class Movimiento_Detalle(models.Model):
     Cantidad = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
     Detalle = models.CharField(max_length=30, validators=[alfanumericos])
-    fk_item = models.ForeignKey(Items, null=True)
-    fk_movimiento = models.ForeignKey(Movimientos,null=True)
+    fk_item = models.ForeignKey(Item, null=True)
+    fk_movimiento = models.ForeignKey(Movimiento,null=True)
 
 class Movimiento_Detalle_ID(models.Model):
-    fk_item = models.ForeignKey(Items,null=True)
+    fk_item = models.ForeignKey(Item,null=True)
     fk_movimientoDetalle = models.ForeignKey(Movimiento_Detalle,null=True)
     fk_tipoIdenticacion = models.ForeignKey(Tipo_Identificacion, null=True)
 
-class Prestarios(models.Model):
+class Prestario(models.Model):
     Funcion = models.CharField(max_length=20 , validators=[alfanumericos])
     Activo = models.BooleanField(default=False)
-    fk_persona = models.ForeignKey(Personas,null=True)
+    fk_persona = models.ForeignKey(Persona,null=True)
 
 #falta validar
-class Prestamos(models.Model):
+class Prestamo(models.Model):
     Fecha_vencimiento = models.DateField()
     Fecha_devolucion = models.DateField()
-    fk_movimiento = models.ForeignKey(Movimientos,null=True)
-    fk_prestario = models.ForeignKey(Prestarios,null=True)
+    fk_movimiento = models.ForeignKey(Movimiento,null=True)
+    fk_prestario = models.ForeignKey(Prestario,null=True)
 
-class Proveedores(models.Model):
+class Proveedor(models.Model):
     activo = models.BooleanField(default=False)
-    fk_persona = models.ForeignKey(Personas,null=True)
+    fk_persona = models.ForeignKey(Persona,null=True)
 
-class Ingresos(models.Model):
+class Ingreso(models.Model):
     Acta_entrega = models.CharField(max_length=30)
-    fk_movimientos = models.ForeignKey(Movimientos,null=True)
-    fk_proveedor = models.ForeignKey(Proveedores,null=True)
+    fk_movimientos = models.ForeignKey(Movimiento,null=True)
+    fk_proveedor = models.ForeignKey(Proveedor,null=True)
 
-class Salidas(models.Model):
+class Salida(models.Model):
     Motivo_salida = models.CharField(max_length=30)
     No_Acta_Salida = models.CharField(max_length=30)
-    fk_movimientos = models.ForeignKey(Movimientos,null=True)
+    fk_movimientos = models.ForeignKey(Movimiento,null=True)
 
 class Opciones_Sistema(models.Model):
     Descripcion = models.CharField(max_length=30)
 
-class Restricciones(models.Model):
+class Restriccion(models.Model):
     Puede_leer = models.BooleanField(default=False)
     Puede_ingresar = models.BooleanField(default=False)
     Puede_modificar = models.BooleanField(default=False)

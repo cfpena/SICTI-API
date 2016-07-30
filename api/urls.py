@@ -9,6 +9,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'personas', views.PersonaViewSet)
 router.register(r'usuarios', views.UsuarioViewSet)
+router.register(r'items', views.ItemViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
