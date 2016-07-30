@@ -11,6 +11,9 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
+
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('username')
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
 
@@ -29,7 +32,13 @@ class PersonaViewSet(viewsets.ModelViewSet):
     search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
     queryset = Personas.objects.all()
     serializer_class = PersonaSerializer
-
+class UsuarioViewSet(viewsets.ModelViewSet):
+    #filter_backends = (filters.DjangoFilterBackend,)
+    #filter_fields = ('Nombre','Apellido','Email','Telefono','Genero')
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
+    queryset = Personas.objects.all()
+    serializer_class = PersonaSerializer
 
 
 # Create your views here.
