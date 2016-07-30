@@ -6,7 +6,6 @@ from tokenapi.http import JsonResponse, JsonError
 from .serializers import *
 from .models import *
 
-
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -17,7 +16,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
 
-@token_required
+
 class GroupViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
@@ -32,6 +31,7 @@ class PersonaViewSet(viewsets.ModelViewSet):
     search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
     queryset = Persona.objects.all()
     serializer_class = PersonaSerializer
+
 class UsuarioViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
