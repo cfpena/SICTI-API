@@ -39,10 +39,16 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     serializer_class = PersonaSerializer
 
 class ItemViewSet(viewsets.ModelViewSet):
-    #filter_backends = (filters.SearchFilter,)
-    #search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
-    queryset = Item.objects.all()
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("Codigo","Nombre","Marca","Modelo","Is_dispositivo")
+    queryset = Item.objects.filter(Is_kit=False)
     serializer_class = ItemSerializer
+
+class KitViewSet(viewsets.ModelViewSet):
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("Codigo","Nombre","Marca","Modelo")
+    queryset = Item.objects.filter(Is_kit=True)
+    serializer_class = KitSerializer
 
 
 # Create your views here.

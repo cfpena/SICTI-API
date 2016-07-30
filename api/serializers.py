@@ -14,13 +14,20 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ('name')
 class PersonaSerializer(serializers.HyperlinkedModelSerializer):
-    usuario = UserSerializer()
+    Usuario = UserSerializer()
 
     class Meta:
         model = Persona
         fields = '__all__'
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = Item
-        fields = '__all__'
+        fields = ("Codigo","Nombre","Marca","Modelo","Is_dispositivo","Stock","Images")
+
+class KitSerializer(serializers.HyperlinkedModelSerializer):
+    Items=ItemSerializer(many=True)
+    class Meta:
+        model = Item
+        fields = ("Codigo","Nombre","Marca","Modelo","Stock","Images","Items")

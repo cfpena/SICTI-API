@@ -25,7 +25,7 @@ class Persona(models.Model):
         choices= generoChoices ,
         default='M',
     )
-    usuario = models.ForeignKey(User,null=True)
+    Usuario = models.ForeignKey(User,null=True)
 
 class Item(models.Model):
 
@@ -37,7 +37,7 @@ class Item(models.Model):
     Is_kit = models.BooleanField(default=False)
     Stock = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
     Images = models.ImageField(upload_to='items', blank=True)
-    items = models.ForeignKey('self',related_name='contenido', on_delete=models.CASCADE, null=True)
+    Items = models.ManyToManyField('self',symmetrical=False,related_name='contenido')
 class Item_Detalle_Kit(models.Model):
     Cantidad = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
     fk_item = models.ForeignKey(Item,null=True)
