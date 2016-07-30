@@ -35,7 +35,7 @@ class Items(models.Model):
     Is_dispositivo = models.BooleanField(default=False)
     Is_kit = models.BooleanField(default=False)
     Stock = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
-    Images = models.ImageField(upload_to='fotos', blank=True)
+    Images = models.ImageField(upload_to='items', blank=True)
 
 class Items_Detalle_Kits(models.Model):
     Cantidad = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
