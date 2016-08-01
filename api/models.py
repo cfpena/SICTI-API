@@ -20,6 +20,10 @@ class Persona(models.Model):
         ('M', 'Masculino'),
         ('F', 'Femenino')
     )
+    tipoChoices=(
+        ('Administrador','Administrador'),
+        ("Ayudante",'Ayudante')
+    )
     CI = models.CharField(max_length=10, unique=True, validators=[solo_numeros])
     Nombre = models.CharField(max_length=30, validators=[solo_letras])
     Apellido = models.CharField(max_length=30, validators=[solo_letras])
@@ -30,7 +34,12 @@ class Persona(models.Model):
         choices= generoChoices ,
         default='M',
     )
-    Usuario = models.ForeignKey(User,null=True)
+    Tipo = models.CharField(
+        max_length=20,
+        choices= tipoChoices ,
+        default='Ayu',
+    )
+    Usuario = models.ForeignKey(User,null=True,blank=True)
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Nombre + self.Apellido)
 @python_2_unicode_compatible
