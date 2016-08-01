@@ -44,7 +44,6 @@ class Persona(models.Model):
         return smart_unicode(self.Nombre + self.Apellido)
 @python_2_unicode_compatible
 class Item(models.Model):
-
     Codigo = models.CharField(max_length=10,unique=True, validators=[alfanumericos])
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
     Marca = models.CharField(max_length=20, blank=True, validators=[alfanumericos])
@@ -54,8 +53,10 @@ class Item(models.Model):
     Stock = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
     Images = models.ImageField(upload_to='items', blank=True)
     Items = models.ManyToManyField('self',symmetrical=False,related_name='contenido')
+
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Nombre)
+
 
 class Item_Detalle_Kit(models.Model):
     Cantidad = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
@@ -130,6 +131,22 @@ class Opciones_Sistema(models.Model):
     Descripcion = models.CharField(max_length=30)
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Descripcion)
+
+
+class Tipo_Usuario(models.Model):
+    tiposChoices=(
+        ('T', 'Ayudante'),
+        ('D', 'Administrador')
+    )
+    Tipo_usuario = models.CharField(
+        max_length=2,
+        choices= tiposChoices ,
+        default='D',
+    )
+    Descripcion = models.CharField(max_length=30, blank=True)
+    fk_usuario = models.ForeignKey(User, null=True)
+
+
 class Restriccion(models.Model):
     Puede_leer = models.BooleanField(default=False)
     Puede_ingresar = models.BooleanField(default=False)
@@ -137,4 +154,4 @@ class Restriccion(models.Model):
     Puede_eliminar = models.BooleanField(default=False)
     Puede_imprimir = models.BooleanField(default=False)
     fk_opcionesSistema = models.ForeignKey(Opciones_Sistema,null=True)
-    fk_usuario = models.ForeignKey(User,null=True)
+    fk_tipo_usuario = models.ForeignKey(Tipo_Usuario, null=True)
