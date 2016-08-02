@@ -1,7 +1,9 @@
 from django.contrib import admin
 from api.models import *
+from django.contrib.auth.models import User
 
-# Register your models here.
+# Register your models here
+
 admin.site.register(Persona)
 admin.site.register(Item)
 admin.site.register(Item_Detalle_Kit)
@@ -16,5 +18,7 @@ admin.site.register(Prestamo)
 admin.site.register(Proveedor)
 admin.site.register(Ingreso)
 admin.site.register(Salida)
-admin.site.register(Opciones_Sistema)
-admin.site.register(Restriccion)
+
+#admin.site.register(Opciones_Sistema)
+#admin.site.register(Restriccion)
+#admin.site.register(Tipo_Usuario)
