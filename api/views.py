@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets,filters
 from tokenapi.decorators import token_required
 from tokenapi.http import JsonResponse, JsonError
+from rest_framework.decorators import api_view
 from .serializers import *
 from .models import *
 
@@ -36,7 +37,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
     queryset = Persona.objects.all()
-    serializer_class = PersonaSerializer
+    serializer_class = UsuarioSerializer
 
 class ItemViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
