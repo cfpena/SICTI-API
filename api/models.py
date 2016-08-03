@@ -31,7 +31,7 @@ class Persona(models.Model):
         ('M', 'Masculino'),
         ('F', 'Femenino')
     )
-    CI = models.CharField(max_length=10, unique=True, validators=[solo_numeros])
+    CI = models.CharField(max_length=10, validators=[solo_numeros],null=True,blank=True)
     Nombre = models.CharField(max_length=30, validators=[solo_letras])
     Apellido = models.CharField(max_length=30, validators=[solo_letras])
     Email = models.EmailField(max_length=60, unique=True)
@@ -39,7 +39,7 @@ class Persona(models.Model):
     Genero = models.CharField(
         max_length=2,
         choices= generoChoices ,
-        default='M',
+        default='M',blank=True,null=True
     )
     Usuario = models.OneToOneField(User, on_delete=models.CASCADE,null=True,blank=True)
     def __str__(self):

@@ -4,6 +4,10 @@ from rest_framework import viewsets,filters
 from tokenapi.decorators import token_required
 from tokenapi.http import JsonResponse, JsonError
 from rest_framework.decorators import api_view
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .serializers import *
 from .models import *
 
@@ -38,6 +42,21 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
     queryset = Persona.objects.all()
     serializer_class = UsuarioSerializer
+class AccountPassword(generics.GenericAPIView):
+
+    serializer_class = ChangePasswordSerializer
+    queryset = User.objects.all()
+
+    def post(self, request, format=None):
+        """ validate password change operation and return result """
+        serializer_class = self.get_serializer_class()
+
+        serializer = serializer_class(data=request.data, instance=request.user)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({ 'detail': 'Password successfully changed' })
+        return Response(serializer.errors, status=400)
 
 class ItemViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
