@@ -15,5 +15,6 @@ router.register(r'kits', views.KitViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    
+    url(r'^password/$',views.AccountPassword.as_view()),
+
 ]
