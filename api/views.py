@@ -39,9 +39,15 @@ class PersonaViewSet(viewsets.ModelViewSet):
 
 class UsuarioViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
+    search_fields = ('Nombre','Apellido','Email','Telefono','Genero','id')
     queryset = Persona.objects.all()
     serializer_class = UsuarioSerializer
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({ 'detail': 'Object successfully changed' })
 class AccountPassword(generics.GenericAPIView):
 
     serializer_class = ChangePasswordSerializer
