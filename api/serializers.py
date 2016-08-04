@@ -25,8 +25,6 @@ class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
 
         user = User.objects.create(username=validated_data.get('Usuario')['username'])
-        print(validated_data.get('Usuario'))
-
         groupNames=validated_data.get('Usuario')['groups']
         if(len(groupNames)>0):
             group = Group.objects.get(name=groupNames[0])
