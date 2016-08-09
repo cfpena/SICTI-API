@@ -56,7 +56,7 @@ class Item(models.Model):
     Is_kit = models.BooleanField(default=False)
     Stock = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
     Images = models.ImageField(upload_to='items', blank=True)
-    Items = models.ManyToManyField('self',symmetrical=False,related_name='contenido')
+    Items = models.ManyToManyField('self',symmetrical=False,related_name='contenido', null=True, blank=True)
 
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Nombre)
