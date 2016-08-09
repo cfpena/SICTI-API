@@ -51,6 +51,7 @@ class Item(models.Model):
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
     Marca = models.CharField(max_length=20, blank=True, validators=[alfanumericos])
     Modelo = models.CharField(max_length=20, blank=True, validators=[alfanumericos])
+    Descripcion = models.CharField(max_length=40, blank=True)
     Is_dispositivo = models.BooleanField(default=False)
     Is_kit = models.BooleanField(default=False)
     Stock = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
