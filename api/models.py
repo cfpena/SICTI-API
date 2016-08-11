@@ -41,11 +41,12 @@ class Item(models.Model):
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
     Marca = models.CharField(max_length=20, blank=True, validators=[alfanumericos])
     Modelo = models.CharField(max_length=20, blank=True, validators=[alfanumericos])
+    Descripcion = models.CharField(max_length=40, blank=True)
     Is_dispositivo = models.BooleanField(default=False)
     Is_kit = models.BooleanField(default=False)
     Stock = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
     Images = models.ImageField(upload_to='items', blank=True)
-    Items = models.ManyToManyField('self',symmetrical=False,related_name='contenido')
+    Items = models.ManyToManyField('self',symmetrical=False,related_name='contenido', null=True, blank=True)
 
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Nombre)
