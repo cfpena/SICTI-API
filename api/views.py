@@ -40,7 +40,7 @@ class PersonaViewSet(viewsets.ModelViewSet):
 class UsuarioViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Nombre','Apellido','Email','Telefono','Genero','id')
-    queryset = Persona.objects.all()
+    queryset = Persona.objects.exclude(Usuario=None)
     serializer_class = UsuarioSerializer
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -70,11 +70,24 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.filter(Is_kit=False)
     serializer_class = ItemSerializer
 
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({ 'detail': 'Object successfully changed' })
+
 class KitViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ("Codigo","Nombre","Marca","Modelo")
     queryset = Item.objects.filter(Is_kit=True)
     serializer_class = KitSerializer
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({ 'detail': 'Object successfully changed' })
 
 
 # Create your views here.
