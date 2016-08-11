@@ -34,7 +34,7 @@ class PersonaViewSet(viewsets.ModelViewSet):
     #filter_fields = ('Nombre','Apellido','Email','Telefono','Genero')
     filter_backends = (filters.SearchFilter,)
     search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
-    queryset = Persona.objects.all()
+    queryset = Persona.objects.filter(Usuario=None)
     serializer_class = PersonaSerializer
 
 class UsuarioViewSet(viewsets.ModelViewSet):

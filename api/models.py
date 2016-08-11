@@ -15,16 +15,6 @@ alfanumericos = RegexValidator(r'^[0-9a-zA-Z]*$','Solo alfanumericos')
 
 # Create your models here.
 
-'''
-@python_2_unicode_compatible
-class Tipo_Usuario(models.Model):
-    Tipo_usuario = models.CharField(max_length=15)
-    Descripcion = models.CharField(max_length=30, blank=True)
-    Usuario = models.ManyToManyField(User,symmetrical=False,related_name='usuario')
-    def __str__(self):              # __unicode__ on Python 2
-        return smart_unicode(self.Tipo_usuario)
-'''
-
 @python_2_unicode_compatible
 class Persona(models.Model):
     generoChoices=(
@@ -129,18 +119,3 @@ class Salida(models.Model):
     fk_movimientos = models.ForeignKey(Movimiento,null=True)
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Motivo_salida)
-'''
-@python_2_unicode_compatible
-class Opciones_Sistema(models.Model):
-    Descripcion = models.CharField(max_length=30)
-    def __str__(self):              # __unicode__ on Python 2
-        return smart_unicode(self.Descripcion)
-class Restriccion(models.Model):
-    Puede_leer = models.BooleanField(default=False)
-    Puede_ingresar = models.BooleanField(default=False)
-    Puede_modificar = models.BooleanField(default=False)
-    Puede_eliminar = models.BooleanField(default=False)
-    Puede_imprimir = models.BooleanField(default=False)
-    fk_opcionesSistema = models.ForeignKey(Opciones_Sistema,null=True)
-    fk_tipo_usuario = models.ForeignKey(Tipo_Usuario, null=True)
-'''
