@@ -88,6 +88,15 @@ class KitViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response({ 'detail': 'Object successfully changed' })
-
+class PrestamoViewSet(viewsets.ModelViewSet):
+    #filter_backends = (filters.SearchFilter,)
+    #search_fields = ("Codigo","Nombre","Marca","Modelo")
+    queryset = Prestamo.objects.all()
+    serializer_class = PrestamoSerializer
+class MovimientoViewSet(viewsets.ModelViewSet):
+    #filter_backends = (filters.SearchFilter,)
+    #search_fields = ("Codigo","Nombre","Marca","Modelo")
+    queryset = Movimiento.objects.all()
+    serializer_class = MovimientoSerializer
 
 # Create your views here.

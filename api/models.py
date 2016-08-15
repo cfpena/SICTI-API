@@ -45,6 +45,7 @@ class Item(models.Model):
     Descripcion = models.CharField(max_length=40, blank=True)
     Is_dispositivo = models.BooleanField(default=False)
     Is_kit = models.BooleanField(default=False)
+    Is_Prestado = models.BooleanField(default=False)
     Stock = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
     Images = models.ImageField(upload_to='items', blank=True)
     Items = models.ManyToManyField('self',symmetrical=False,blank=True,default=None,through='Item_Relationship')
@@ -82,7 +83,7 @@ class Movimiento(models.Model):
     tipoChoices=(
         ('P', 'Prestamo'),
         ('I', 'Ingreso'),
-        ('S', 'Salinda')
+        ('S', 'Salida')
     )
     Fecha = models.DateField(auto_now=True)
     Tipo = models.CharField(
