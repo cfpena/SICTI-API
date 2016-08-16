@@ -14,10 +14,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('username','groups','url','id')
 class PersonaSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = Persona
         fields = '__all__'
 class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='usuarios-detail',
+    )
     Usuario = UserSerializer()
     class Meta:
         model = Persona
@@ -68,6 +72,7 @@ class KitSerializer(serializers.HyperlinkedModelSerializer):
         model = Item
         fields = ("url","Codigo","Nombre","Marca","Modelo","Descripcion","Stock","Is_Prestado","Images","Items")
 class PrestamoSerializer(serializers.HyperlinkedModelSerializer):
+    Persona=PersonaSerializer()
     #Items=ItemSerializer(many=True)
     class Meta:
         model = Prestamo
