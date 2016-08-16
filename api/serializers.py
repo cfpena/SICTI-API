@@ -23,15 +23,12 @@ class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
         model = Persona
         fields = '__all__'
     def create(self, validated_data):
-
         user = User.objects.create(username=validated_data.get('Usuario')['username'])
         groupNames=validated_data.get('Usuario')['groups']
         if(len(groupNames)>0):
             group = Group.objects.get(name=groupNames[0])
             if(group!=None):
                 user.groups.add(group)
-
-
         return  Persona.objects.create(CI=validated_data.get('CI'),
                                          Nombre=validated_data.get('Nombre'),
                                          Apellido=validated_data.get('Apellido'),
@@ -39,23 +36,13 @@ class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
                                          Telefono=validated_data.get('Telefono'),
                                          Genero=validated_data.get('Genero'),
                                          Usuario=user)
-
 class ChangePasswordSerializer(serializers.Serializer):
-    user = serializers.CharField(
-        help_text = 'User',
-    )
-    password1 = serializers.CharField(
-        help_text = 'New Password',
-    )
-    password2 = serializers.CharField(
-        help_text = 'New Password (confirmation)',
-    )
-
-
+    user = serializers.CharField(help_text = 'User',)
+    password1 = serializers.CharField(help_text = 'New Password',)
+    password2 = serializers.CharField(help_text = 'New Password (confirmation)',)
     def create(self, attrs, instance=None):
         return User(**attrs)
     def update(self, user, instance=None):
-
         password1=instance.get('password1')
         password2=instance.get('password2')
         usuario = User.objects.get(username=instance.get('user'))
@@ -68,18 +55,30 @@ class ChangePasswordSerializer(serializers.Serializer):
                     return usuario
                 else:
                     raise serializers.ValidationError('Password confirmation mismatch')
-
         return instance
-
-
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Item
-        fields = ("Codigo","Nombre","Marca","Modelo","Is_dispositivo","Stock","Images")
+
+        fields = ("id","Codigo","CodigoEspol","CodigoSenecyt","Nombre","Marca","Modelo","Descripcion","Is_dispositivo","Stock","Images")
+
 
 class KitSerializer(serializers.HyperlinkedModelSerializer):
     #Items=ItemSerializer(many=True)
     class Meta:
         model = Item
-        fields = ("Codigo","Nombre","Marca","Modelo","Stock","Images","Items")
+
+        fields = ("url","Codigo","CodigoEspol","CodigoSenecyt","Nombre","Marca","Modelo","Descripcion","Stock","Items","Is_kit")
+
+
+class PrestamoSerializer(serializers.HyperlinkedModelSerializer):
+    #Items=ItemSerializer(many=True)
+    class Meta:
+        model = Prestamo
+        fields =  '__all__'
+class MovimientoSerializer(serializers.HyperlinkedModelSerializer):
+    #Items=ItemSerializer(many=True)
+    class Meta:
+        model = Movimiento
+        fields = '__all__'

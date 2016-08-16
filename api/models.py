@@ -7,23 +7,12 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.encoding import smart_unicode
 
-
 #validaciones
 solo_letras = RegexValidator(r'^[ña-zA-Z]*$','Solo letras')
 solo_numeros = RegexValidator(r'^\d{1,10}$','Solo numeros')
 alfanumericos = RegexValidator(r'^[0-9a-zA-Z]*$','Solo alfanumericos')
 
 # Create your models here.
-
-'''
-@python_2_unicode_compatible
-class Tipo_Usuario(models.Model):
-    Tipo_usuario = models.CharField(max_length=15)
-    Descripcion = models.CharField(max_length=30, blank=True)
-    Usuario = models.ManyToManyField(User,symmetrical=False,related_name='usuario')
-    def __str__(self):              # __unicode__ on Python 2
-        return smart_unicode(self.Tipo_usuario)
-'''
 
 @python_2_unicode_compatible
 class Persona(models.Model):
@@ -48,23 +37,27 @@ class Persona(models.Model):
 @python_2_unicode_compatible
 class Item(models.Model):
     Codigo = models.CharField(max_length=10,unique=True, validators=[alfanumericos])
+    CodigoEspol = models.CharField(max_length=10,unique=True, validators=[alfanumericos],null=True,blank=True,default=None)
+    CodigoSenecyt = models.CharField(max_length=10,unique=True, validators=[alfanumericos],null=True,blank=True,default=None)
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
     Marca = models.CharField(max_length=20, blank=True, validators=[alfanumericos])
     Modelo = models.CharField(max_length=20, blank=True, validators=[alfanumericos])
+    Descripcion = models.CharField(max_length=40, blank=True)
     Is_dispositivo = models.BooleanField(default=False)
     Is_kit = models.BooleanField(default=False)
+    Is_Prestado = models.BooleanField(default=False)
     Stock = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
     Images = models.ImageField(upload_to='items', blank=True)
-    Items = models.ManyToManyField('self',symmetrical=False,related_name='contenido')
-
+    Items = models.ManyToManyField('self',symmetrical=False,blank=True,default=None,through='Item_Relationship')
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Nombre)
 
 
-class Item_Detalle_Kit(models.Model):
+class Item_Relationship(models.Model):
+    from_item = models.ForeignKey(Item, related_name='from_items',default=None,null=True,blank=True)
+    to_item = models.ForeignKey(Item, related_name='to_items',default=None,null=True,blank=True)
     Cantidad = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
-    fk_item = models.ForeignKey(Item,null=True)
-
+'''
 @python_2_unicode_compatible
 class Tipo_Identificacion(models.Model):
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
@@ -80,10 +73,28 @@ class Tipo_Movimiento(models.Model):
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Nombre)
-
+'''
+#falta validar
+class Prestamo(models.Model):
+    Fecha_vencimiento = models.DateField()
+    Fecha_devolucion = models.DateField()
+    Persona = models.ForeignKey(Persona)
 class Movimiento(models.Model):
+    tipoChoices=(
+        ('P', 'Prestamo'),
+        ('I', 'Ingreso'),
+        ('S', 'Salida')
+    )
     Fecha = models.DateField(auto_now=True)
-    fk_tipoMovimiento = models.ForeignKey(Tipo_Movimiento, null=True)
+    Tipo = models.CharField(
+        max_length=1,
+        choices= tipoChoices
+    )
+    Cantidad = models.IntegerField()
+    Detalle = models.CharField(max_length=200)
+    Item = models.ForeignKey(Item,null=True,blank=True,default=None)
+    Prestamo=models.ForeignKey(Prestamo,null=True,blank=True)
+'''
 @python_2_unicode_compatible
 class Movimiento_Detalle(models.Model):
     Cantidad = models.IntegerField(default=0, validators=[MaxValueValidator(50),MinValueValidator(1)])
@@ -105,21 +116,15 @@ class Prestario(models.Model):
     fk_persona = models.ForeignKey(Persona,null=True)
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Funcion)
-
-#falta validar
-class Prestamo(models.Model):
-    Fecha_vencimiento = models.DateField()
-    Fecha_devolucion = models.DateField()
-    fk_movimiento = models.ForeignKey(Movimiento,null=True)
-    fk_prestario = models.ForeignKey(Prestario,null=True)
 class Proveedor(models.Model):
     activo = models.BooleanField(default=False)
     fk_persona = models.ForeignKey(Persona,null=True)
+
 @python_2_unicode_compatible
 class Ingreso(models.Model):
     Acta_entrega = models.CharField(max_length=30)
     fk_movimientos = models.ForeignKey(Movimiento,null=True)
-    fk_proveedor = models.ForeignKey(Proveedor,null=True)
+    #fk_proveedor = models.ForeignKey(Proveedor,null=True)
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Acta_entrega)
 @python_2_unicode_compatible
@@ -129,18 +134,4 @@ class Salida(models.Model):
     fk_movimientos = models.ForeignKey(Movimiento,null=True)
     def __str__(self):              # __unicode__ on Python 2
         return smart_unicode(self.Motivo_salida)
-'''
-@python_2_unicode_compatible
-class Opciones_Sistema(models.Model):
-    Descripcion = models.CharField(max_length=30)
-    def __str__(self):              # __unicode__ on Python 2
-        return smart_unicode(self.Descripcion)
-class Restriccion(models.Model):
-    Puede_leer = models.BooleanField(default=False)
-    Puede_ingresar = models.BooleanField(default=False)
-    Puede_modificar = models.BooleanField(default=False)
-    Puede_eliminar = models.BooleanField(default=False)
-    Puede_imprimir = models.BooleanField(default=False)
-    fk_opcionesSistema = models.ForeignKey(Opciones_Sistema,null=True)
-    fk_tipo_usuario = models.ForeignKey(Tipo_Usuario, null=True)
-'''
+    '''
