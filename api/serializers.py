@@ -64,13 +64,18 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Item
-        fields = ("id","Codigo","Nombre","Marca","Modelo","Descripcion","Is_dispositivo","Stock","Is_Prestado","Images")
+
+        fields = ("id","Codigo","CodigoEspol","CodigoSenecyt","Nombre","Marca","Modelo","Descripcion","Is_dispositivo","Stock","Images")
+
 
 class KitSerializer(serializers.HyperlinkedModelSerializer):
     #Items=ItemSerializer(many=True)
     class Meta:
         model = Item
-        fields = ("url","Codigo","Nombre","Marca","Modelo","Descripcion","Stock","Is_Prestado","Images","Items")
+
+        fields = ("url","Codigo","CodigoEspol","CodigoSenecyt","Nombre","Marca","Modelo","Descripcion","Stock","Items","Is_kit")
+
+
 class PrestamoSerializer(serializers.HyperlinkedModelSerializer):
     Persona=PersonaSerializer()
     #Items=ItemSerializer(many=True)
