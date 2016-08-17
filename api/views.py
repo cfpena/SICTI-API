@@ -29,25 +29,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
-class PersonaViewSet(viewsets.ModelViewSet):
-    #filter_backends = (filters.DjangoFilterBackend,)
-    #filter_fields = ('Nombre','Apellido','Email','Telefono','Genero')
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
-    queryset = Persona.objects.filter(Usuario=None)
-    serializer_class = PersonaSerializer
 
-class UsuarioViewSet(viewsets.ModelViewSet):
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('Nombre','Apellido','Email','Telefono','Genero','id')
-    queryset = Persona.objects.exclude(Usuario=None)
-    serializer_class = UsuarioSerializer
-    def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.serializer_class(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({ 'detail': 'Object successfully changed' })
 class AccountPassword(generics.GenericAPIView):
 
     serializer_class = ChangePasswordSerializer
@@ -63,6 +45,75 @@ class AccountPassword(generics.GenericAPIView):
             serializer.save()
             return Response({ 'detail': 'Password successfully changed' })
         return Response(serializer.errors, status=400)
+
+class PrestadorViewSet(viewsets.ModelViewSet):
+    #filter_backends = (filters.DjangoFilterBackend,)
+    #filter_fields = ('Nombre','Apellido','Email','Telefono','Genero')
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
+    queryset = Prestador.objects.all()
+    serializer_class = PrestadorSerializer
+
+class ElementoViewSet(viewsets.ModelViewSet):
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("Codigo","Nombre")
+    queryset = Elemento.objects.filter(dispositivo=None)
+    serializer_class = ElementoSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({ 'detail': 'Objecto modificado correctamente' })
+class DispositivoViewSet(viewsets.ModelViewSet):
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("Codigo","Nombre")
+    queryset = Dispositivo.objects.filter(kit=None)
+    serializer_class = DispositivoSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({ 'detail': 'Objecto modificado correctamente' })
+class KitViewSet(viewsets.ModelViewSet):
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("Codigo","Nombre")
+    queryset = Kit.objects.all()
+    serializer_class = KitSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({ 'detail': 'Objecto modificado correctamente' })
+class KitElementoViewSet(viewsets.ModelViewSet):
+    queryset = KitContieneElemento.objects.all()
+    serializer_class = KitContieneElementoSerializer
+
+class PrestamoViewSet(viewsets.ModelViewSet):
+    queryset = Prestamo.objects.all()
+    serializer_class = PrestamoSerializer
+
+class IngresoEgresoViewSet(viewsets.ModelViewSet):
+    queryset = IngresoEgreso.objects.all()
+    serializer_class = IngresoEgresoSerializer
+'''
+class UsuarioViewSet(viewsets.ModelViewSet):
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('Nombre','Apellido','Email','Telefono','Genero','id')
+    queryset = Persona.objects.exclude(Usuario=None)
+    serializer_class = UsuarioSerializer
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({ 'detail': 'Object successfully changed' })
+
 
 class ItemViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
@@ -100,3 +151,4 @@ class MovimientoViewSet(viewsets.ModelViewSet):
     serializer_class = MovimientoSerializer
 
 # Create your views here.
+'''
