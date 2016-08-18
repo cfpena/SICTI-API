@@ -6,8 +6,6 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.encoding import smart_unicode
 from django.core.exceptions import ValidationError
-from sorl.thumbnail import get_thumbnail
-
 #validaciones
 #puede contener espacios
 solo_letras = RegexValidator(r'^[ña-zA-Z]*$','Solo letras')
