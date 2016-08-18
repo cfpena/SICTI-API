@@ -72,7 +72,7 @@ class Elemento(models.Model):
     Descripcion = models.CharField(max_length=40, blank=True)
     Stock = models.IntegerField(default=0)
     Stock_Disponible = models.IntegerField(default=0)
-    Image = models.ImageField(upload_to='items', blank=True)
+    Imagen = models.ImageField(upload_to='items', blank=True)
     Proveedor = models.ForeignKey(Proveedor, null=True,blank=True,default=None)
 
     def __str__(self):
