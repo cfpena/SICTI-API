@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tokenapi',
     'corsheaders',
     'django_extensions',
+
 ]
 
 MIDDLEWARE_CLASSES = [
