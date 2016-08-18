@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator, RegexVa
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.encoding import smart_unicode
+from django.core.exceptions import ValidationError
 
 #validaciones
 #puede contener espacios
@@ -37,13 +38,13 @@ class Proveedor(Persona):
 @python_2_unicode_compatible
 class Prestador(Persona):
     generoChoices = (
-        ('M', 'Masculino'),
-        ('F', 'Femenino')
+        ('Masculino', 'Masculino'),
+        ('Femenino', 'Femenino')
     )
     tipoChoices = (
-        ('T', 'Trabajador'),
-        ('E' , 'Estudiante'),
-        ('X', 'Externo')
+        ('Trabajador', 'Trabajador'),
+        ('Estudiante' , 'Estudiante'),
+        ('Externo', 'Externo')
     )
     CI = models.CharField(max_length=10, validators=[solo_numeros],unique=True)
     Matricula = models.CharField(max_length=9,unique=True,blank=True)
@@ -69,7 +70,6 @@ class Elemento(models.Model):
     Codigo = models.CharField(max_length=10, unique=True, validators=[alfanumericos])
     Nombre = models.CharField(max_length=20, validators=[alfanumericos])
     Descripcion = models.CharField(max_length=40, blank=True)
-    Esta_Prestado = models.BooleanField(default=False)
     Stock = models.IntegerField(default=0)
     Stock_Disponible = models.IntegerField(default=0)
     Image = models.ImageField(upload_to='items', blank=True)
@@ -113,23 +113,64 @@ class Movimiento(models.Model):
     Fecha = models.DateField(auto_now=True)
     Cantidad = models.IntegerField()
     Detalle = models.CharField(max_length=200)
-    Elementos = models.ManyToManyField(Elemento)
+
 
 class IngresoEgreso(Movimiento):
+    Objeto = models.ForeignKey(Elemento)
     tipoChoices = (
-        ('I', 'Ingreso'),
-        ('S', 'Salida')
+        ('Ingreso', 'Ingreso'),
+        ('Egreso', 'Egreso')
     )
     Tipo = models.CharField(
-        max_length=1,
-        choices=tipoChoices
+        choices=tipoChoices,
+        max_length = 7
+
     )
+
+    def save(self, *args, **kwargs):
+
+        if self.Tipo=='Egreso':
+            if self.Objeto.Stock_Disponible-self.Cantidad<0:
+                raise ValidationError('Stock no dispobible', code=0001)
+            else:
+                self.Objeto.Stock = self.Objeto.Stock-self.Cantidad
+                self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible-self.Cantidad
+                self.Objeto.save()
+                super(IngresoEgreso, self).save(*args, **kwargs)
+        elif self.Tipo=='Ingreso':
+            self.Objeto.Stock = self.Objeto.Stock + self.Cantidad
+            self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible + self.Cantidad
+            self.Objeto.save()
+            super(IngresoEgreso, self).save(*args, **kwargs)
 
 class Prestamo(Movimiento):
     Fecha_vencimiento = models.DateField()
-    Fecha_devolucion = models.DateField()
     Prestador = models.ForeignKey(Prestador)
+    Objeto = models.ForeignKey(Elemento)
+
+    def save(self, *args, **kwargs):
+        if not self.pk or kwargs.get('force_insert', False):
+            if self.Objeto.Stock_Disponible-self.Cantidad<0:
+                raise ValidationError('Objeto(s) no dispobible', code=0001)
+            else:
+                self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible-self.Cantidad
+                self.Objeto.save()
+                super(IngresoEgreso, self).save(*args, **kwargs)
+        else:
+            super(IngresoEgreso, self).save(*args, **kwargs)
 
     def __str__(self):
         return smart_unicode(self.Persona)
 
+
+class Devolucion(Movimiento):
+    Prestamo = models.OneToOneField(Prestamo)
+
+    def save(self, *args, **kwargs):
+        if not self.pk or kwargs.get('force_insert', False):
+            self.Prestamo.Objeto.Stock_Disponible = self.Prestamo.Objeto.Stock_Disponible + self.Cantidad
+            self.Objeto.save()
+            super(IngresoEgreso, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return smart_unicode(self.Persona)

@@ -72,7 +72,7 @@ class KitSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Kit
         fields = '__all__'
-        
+
 
 
 class KitContieneElementoSerializer(serializers.HyperlinkedModelSerializer):

@@ -6,3 +6,4 @@ django-filter
 pygments
 django-cors-headers
 Pillow
+django-extensions
