@@ -11,13 +11,13 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    #groups=GroupSerializer(many=True,read_only=True)
+    groups=GroupSerializer(many=True)
     Email = serializers.CharField(source='username')
     Nombre = serializers.CharField(source='first_name')
     Apellido = serializers.CharField(source='last_name')
     class Meta:
         model = User
-        fields = ('Email','Nombre','Apellido','groups')
+        fields = ('url','Email','Nombre','Apellido','groups')
 
 
 class ChangePasswordSerializer(serializers.Serializer):
