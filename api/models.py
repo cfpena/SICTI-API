@@ -74,6 +74,10 @@ class Elemento(models.Model):
     Imagen = models.ImageField(upload_to='items', blank=True,null=True)
     Proveedor = models.ForeignKey(Proveedor, null=True,blank=True,default=None)
 
+    def save(self, *args, **kwargs):
+        self.Stock_Disponible=self.Stock
+        super(IngresoEgreso, self).save(*args, **kwargs)
+
     def __str__(self):
         return smart_unicode(self.Nombre)
 

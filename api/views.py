@@ -18,7 +18,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username')
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = User.objects.exclude(is_superuser=True)
     serializer_class = UserSerializer
 
 
@@ -66,6 +66,7 @@ class ElementoViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response({ 'detail': 'Objecto modificado correctamente' })
+
 class DispositivoViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ("Codigo","Nombre")

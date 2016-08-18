@@ -5,7 +5,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'usuarios', views.UserViewSet)
-router.register(r'groupos', views.GroupViewSet)
+router.register(r'grupos', views.GroupViewSet)
 router.register(r'prestador', views.PrestadorViewSet)
 router.register(r'elementos', views.ElementoViewSet)
 router.register(r'dispositivos', views.DispositivoViewSet)
