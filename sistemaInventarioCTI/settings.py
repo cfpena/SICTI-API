@@ -25,7 +25,7 @@ SECRET_KEY = '&rl@^4%xv0l1ca9*bi1smxwxdf$42)wlvz3nf062#*_%8d80&='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tokenapi',
     'corsheaders',
     'django_extensions',
+
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -144,5 +145,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 CORS_ORIGIN_ALLOW_ALL = True
-MEDIA_ROOT = BASE_DIR + '/media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 #CORS_ALLOW_CREDENTIALS = False

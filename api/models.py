@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.encoding import smart_unicode
 from django.core.exceptions import ValidationError
+from sorl.thumbnail import get_thumbnail
 
 #validaciones
 #puede contener espacios
@@ -72,7 +73,7 @@ class Elemento(models.Model):
     Descripcion = models.CharField(max_length=40, blank=True)
     Stock = models.IntegerField(default=0)
     Stock_Disponible = models.IntegerField(default=0)
-    Image = models.ImageField(upload_to='items', blank=True)
+    Imagen = models.ImageField(upload_to='items', blank=True)
     Proveedor = models.ForeignKey(Proveedor, null=True,blank=True,default=None)
 
     def __str__(self):
