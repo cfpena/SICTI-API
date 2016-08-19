@@ -75,8 +75,9 @@ class Elemento(models.Model):
     Proveedor = models.ForeignKey(Proveedor, null=True,blank=True,default=None)
 
     def save(self, *args, **kwargs):
-        self.Stock_Disponible=self.Stock
-        super(IngresoEgreso, self).save(*args, **kwargs)
+        if not self.pk or kwargs.get('force_insert', False):
+            self.Stock_Disponible=self.Stock
+        super(Elemento, self).save(*args, **kwargs)
 
     def __str__(self):
         return smart_unicode(self.Nombre)

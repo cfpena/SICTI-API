@@ -52,8 +52,8 @@ class PrestadorSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ElementoSerializer(serializers.HyperlinkedModelSerializer):
-    Stock = serializers.CharField(read_only=True)
     Stock_Disponible = serializers.CharField(read_only=True)
+    Stock = serializers.CharField(read_only=True)
 
     class Meta:
         model = Elemento
