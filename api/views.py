@@ -17,7 +17,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
 
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('username')
+    search_fields = ('username','first_name','last_name')
     queryset = User.objects.exclude(is_superuser=True)
     serializer_class = UserSerializer
 
