@@ -107,6 +107,12 @@ class ActaViewSet(viewsets.ModelViewSet):
     #search_fields = ('Cedula,''Nombre','Apellido','Email','Telefono','Genero')
     queryset = Acta.objects.all()
     serializer_class = ActaSerializer
+
+class DevolucionViewSet(viewsets.ModelViewSet):
+    #filter_backends = (filters.SearchFilter,)
+    #search_fields = ('Cedula,''Nombre','Apellido','Email','Telefono','Genero')
+    queryset = Devolucion.objects.all()
+    serializer_class = DevolucionSerializer
 '''
 class UsuarioViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)

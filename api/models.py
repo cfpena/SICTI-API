@@ -173,11 +173,13 @@ class Prestamo(Movimiento):
 class Devolucion(Movimiento):
     Prestamo = models.OneToOneField(Prestamo)
 
+    def __str__(self):
+        return smart_unicode(self.Persona)
+
+'''
     def save(self, *args, **kwargs):
         if not self.pk or kwargs.get('force_insert', False):
             self.Prestamo.Objeto.Stock_Disponible = self.Prestamo.Objeto.Stock_Disponible + self.Cantidad
             self.Objeto.save()
             super(IngresoEgreso, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return smart_unicode(self.Persona)
+'''

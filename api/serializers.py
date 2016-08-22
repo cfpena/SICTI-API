@@ -101,6 +101,12 @@ class ActaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Acta
         fields = '__all__'
+
+class DevolucionSerializer(serializers.HyperlinkedModelSerializer):
+    Prestamo = PrestamoSerializer
+    class Meta:
+        model = Devolucion
+        fields = '__all__'
 '''
 class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
