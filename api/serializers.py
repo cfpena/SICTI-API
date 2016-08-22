@@ -103,7 +103,6 @@ class ActaSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 class DevolucionSerializer(serializers.HyperlinkedModelSerializer):
-    Prestamo = PrestamoSerializer
     class Meta:
         model = Devolucion
         fields = '__all__'
