@@ -149,9 +149,9 @@ class IngresoEgreso(Movimiento):
 
 class Acta(models.Model):
     Prestador = models.ForeignKey(Prestador)
+    Fecha_vencimiento = models.DateField()
 
 class Prestamo(Movimiento):
-    Fecha_vencimiento = models.DateField()
     Objeto = models.ForeignKey(Elemento)
     Acta = models.ForeignKey(Acta, null=True, blank=True)
 '''
