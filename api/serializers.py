@@ -95,6 +95,12 @@ class IngresoEgresoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = IngresoEgreso
         fields = '__all__'
+
+class ActaSerializer(serializers.HyperlinkedModelSerializer):
+    Prestamo = PrestamoSerializer
+    class Meta:
+        model = Acta
+        fields = '__all__'
 '''
 class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
