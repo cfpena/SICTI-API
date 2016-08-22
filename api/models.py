@@ -150,7 +150,7 @@ class IngresoEgreso(Movimiento):
 
 class Acta(models.Model):
     Prestador = models.ForeignKey(Prestador)
-    Fecha_vencimiento = models.DateField(default=datetime.now())
+    Fecha_vencimiento = models.DateField(default=datetime.now(),null=True)
 
 class Prestamo(Movimiento):
     Objeto = models.ForeignKey(Elemento)
