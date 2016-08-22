@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.encoding import smart_unicode
 from django.core.exceptions import ValidationError
+from datetime import datetime
 #validaciones
 #puede contener espacios
 solo_letras = RegexValidator(r'^[ña-zA-Z]*$','Solo letras')
@@ -149,7 +150,7 @@ class IngresoEgreso(Movimiento):
 
 class Acta(models.Model):
     Prestador = models.ForeignKey(Prestador)
-    Fecha_vencimiento = models.DateField()
+    Fecha_vencimiento = models.DateField(default=datetime.now())
 
 class Prestamo(Movimiento):
     Objeto = models.ForeignKey(Elemento)
