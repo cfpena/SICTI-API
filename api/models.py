@@ -174,7 +174,7 @@ class Devolucion(Movimiento):
     Prestamo = models.OneToOneField(Prestamo)
 
     def __str__(self):
-        return smart_unicode(self.Persona)
+        return smart_unicode(self.Prestamo)
 
 '''
     def save(self, *args, **kwargs):
