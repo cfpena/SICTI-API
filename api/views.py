@@ -48,7 +48,7 @@ class AccountPassword(generics.GenericAPIView):
 
 class PrestadorViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('CI,''Nombre','Apellido','Email','Telefono','Genero')
+    search_fields = ('CI','Nombre','Apellido','Email','Telefono','Genero')
     queryset = Prestador.objects.all()
     serializer_class = PrestadorSerializer
 
