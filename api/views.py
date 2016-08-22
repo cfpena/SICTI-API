@@ -47,10 +47,8 @@ class AccountPassword(generics.GenericAPIView):
         return Response(serializer.errors, status=400)
 
 class PrestadorViewSet(viewsets.ModelViewSet):
-    #filter_backends = (filters.DjangoFilterBackend,)
-    #filter_fields = ('Nombre','Apellido','Email','Telefono','Genero')
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('Nombre','Apellido','Email','Telefono','Genero')
+    search_fields = ('Cedula,''Nombre','Apellido','Email','Telefono','Genero')
     queryset = Prestador.objects.all()
     serializer_class = PrestadorSerializer
 
@@ -102,6 +100,13 @@ class PrestamoViewSet(viewsets.ModelViewSet):
 class IngresoEgresoViewSet(viewsets.ModelViewSet):
     queryset = IngresoEgreso.objects.all()
     serializer_class = IngresoEgresoSerializer
+
+
+class ActaViewSet(viewsets.ModelViewSet):
+    #filter_backends = (filters.SearchFilter,)
+    #search_fields = ('Cedula,''Nombre','Apellido','Email','Telefono','Genero')
+    queryset = Acta.objects.all()
+    serializer_class = ActaSerializer
 '''
 class UsuarioViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)

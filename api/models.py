@@ -147,11 +147,14 @@ class IngresoEgreso(Movimiento):
             self.Objeto.save()
             super(IngresoEgreso, self).save(*args, **kwargs)
 
+class Acta(models.Model):
+    Prestador = models.ForeignKey(Prestador)
+
 class Prestamo(Movimiento):
     Fecha_vencimiento = models.DateField()
-    Prestador = models.ForeignKey(Prestador)
     Objeto = models.ForeignKey(Elemento)
-
+    Acta = models.ForeignKey(Acta, null=True, blank=True)
+'''
     def save(self, *args, **kwargs):
         if not self.pk or kwargs.get('force_insert', False):
             if self.Objeto.Stock_Disponible-self.Cantidad<0:
@@ -160,12 +163,12 @@ class Prestamo(Movimiento):
                 self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible-self.Cantidad
                 self.Objeto.save()
                 super(IngresoEgreso, self).save(*args, **kwargs)
-        else:
-            super(IngresoEgreso, self).save(*args, **kwargs)
+
+        super(IngresoEgreso, self).save(*args, **kwargs)
 
     def __str__(self):
         return smart_unicode(self.Persona)
-
+'''
 
 class Devolucion(Movimiento):
     Prestamo = models.OneToOneField(Prestamo)
