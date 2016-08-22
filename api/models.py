@@ -84,9 +84,9 @@ class Elemento(models.Model):
 
 @python_2_unicode_compatible
 class Dispositivo(Elemento):
-    CodigoEspol = models.CharField(max_length=10, unique=True, validators=[alfanumericos], null=True, blank=True,
+    CodigoEspol = models.CharField(max_length=10, validators=[alfanumericos], null=True, blank=True,
                                    default=None)
-    CodigoSenecyt = models.CharField(max_length=10, unique=True, validators=[alfanumericos], null=True, blank=True,
+    CodigoSenecyt = models.CharField(max_length=10, validators=[alfanumericos], null=True, blank=True,
                                      default=None)
     Marca = models.CharField(max_length=30, blank=True, validators=[alfanumericos])
     Modelo = models.CharField(max_length=30, blank=True, validators=[alfanumericos])
