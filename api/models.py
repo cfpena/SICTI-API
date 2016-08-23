@@ -151,6 +151,7 @@ class IngresoEgreso(Movimiento):
 '''
 class Acta(models.Model):
     Fecha= models.DateField(auto_now=True)
+    Codigo = models.CharField(max_length=20,null=True,blank=True)
     Prestador = models.ForeignKey(Prestador)
     Fecha_vencimiento = models.DateField(default=datetime.now(),null=True)
 
