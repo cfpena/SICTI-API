@@ -113,6 +113,11 @@ class DevolucionViewSet(viewsets.ModelViewSet):
     #search_fields = ('Cedula,''Nombre','Apellido','Email','Telefono','Genero')
     queryset = Devolucion.objects.all()
     serializer_class = DevolucionSerializer
+class FacturaIngresoViewSet(viewsets.ModelViewSet):
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('Acta','Fecha')
+    queryset = FacturaIngreso.objects.all()
+    serializer_class = FacturaIngresoSerializer
 '''
 class UsuarioViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)

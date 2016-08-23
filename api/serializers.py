@@ -106,6 +106,11 @@ class DevolucionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Devolucion
         fields = '__all__'
+
+class FacturaIngresoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = FacturaIngreso
+        fields = '__all__'
 '''
 class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
