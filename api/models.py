@@ -100,8 +100,8 @@ class Dispositivo(Elemento):
 
 @python_2_unicode_compatible
 class Kit(Dispositivo):
-    Elementos = models.ManyToManyField(Elemento,related_name='elementos', through='KitContieneElemento',null=True)
-    Dispositivos = models.ManyToManyField(Dispositivo,related_name='dispositivos',null=True)
+    Elementos = models.ManyToManyField(Elemento,related_name='elementos', through='KitContieneElemento',null=True,blank=True)
+    Dispositivos = models.ManyToManyField(Dispositivo,related_name='dispositivos',null=True,blank=True)
 
     def __str__(self):
         return smart_unicode(self.Nombre)
