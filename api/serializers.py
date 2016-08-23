@@ -42,6 +42,10 @@ class ChangePasswordSerializer(serializers.Serializer):
                     raise serializers.ValidationError('Password confirmation mismatch')
         return instance
 
+class ReporteSerializer(serializers.Serializer):
+    fecha_inicial = serializers.DateField()
+    fecha_final = serializers.DateField
+
 
 class PrestadorSerializer(serializers.HyperlinkedModelSerializer):
 
