@@ -118,7 +118,7 @@ class KitContieneElemento(models.Model):
 class Movimiento(models.Model):
     Fecha = models.DateField(auto_now=True)
     Cantidad = models.IntegerField()
-    Detalle = models.CharField(max_length=200)
+    Detalle = models.CharField(max_length=200,null=True,blank=True)
 
 
 class IngresoEgreso(Movimiento):
@@ -132,7 +132,7 @@ class IngresoEgreso(Movimiento):
         max_length = 7
 
     )
-'''
+
     def save(self, *args, **kwargs):
 
         if self.Tipo=='Egreso':
@@ -148,7 +148,7 @@ class IngresoEgreso(Movimiento):
             self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible + self.Cantidad
             self.Objeto.save()
             super(IngresoEgreso, self).save(*args, **kwargs)
-'''
+
 class Acta(models.Model):
     Fecha= models.DateField(auto_now=True)
     Codigo = models.CharField(max_length=20,null=True,blank=True)
