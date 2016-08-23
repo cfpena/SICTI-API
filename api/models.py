@@ -150,6 +150,7 @@ class IngresoEgreso(Movimiento):
             super(IngresoEgreso, self).save(*args, **kwargs)
 '''
 class Acta(models.Model):
+    Fecha= models.DateField(auto_now=True)
     Prestador = models.ForeignKey(Prestador)
     Fecha_vencimiento = models.DateField(default=datetime.now(),null=True)
 

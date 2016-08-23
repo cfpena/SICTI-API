@@ -6,10 +6,14 @@ from tokenapi.http import JsonResponse, JsonError
 from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .serializers import *
 from .models import *
+from rest_framework import generics
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.request import Request
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -118,6 +122,32 @@ class FacturaIngresoViewSet(viewsets.ModelViewSet):
     search_fields = ('Acta','Fecha')
     queryset = FacturaIngreso.objects.all()
     serializer_class = FacturaIngresoSerializer
+
+class ReporteInventario(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        fechaInicio=request.data['Fecha_Inicial']
+        fechaFin=request.data['Fecha_Final']
+        query = IngresoEgreso.objects.filter(Fecha__range=(fechaInicio,fechaFin))
+        serializer_context = {
+            'request': Request(request),
+        }
+        serializer = IngresoEgresoSerializer(query,context=serializer_context,many=True)
+        return Response(serializer.data)
+class ReportePrestamo(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        fechaInicio=request.data['Fecha_Inicial']
+        fechaFin=request.data['Fecha_Final']
+        query = Prestamo.objects.filter(Fecha__range=(fechaInicio,fechaFin))
+        serializer_context = {
+            'request': Request(request),
+        }
+        serializer = PrestamoSerializer(query,context=serializer_context,many=True)
+        return Response(serializer.data)
+
 '''
 class UsuarioViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
