@@ -114,6 +114,7 @@ class KitContieneElemento(models.Model):
 
 
 
+
 class Movimiento(models.Model):
     Fecha = models.DateField(auto_now=True)
     Cantidad = models.IntegerField()
@@ -131,7 +132,7 @@ class IngresoEgreso(Movimiento):
         max_length = 7
 
     )
-
+'''
     def save(self, *args, **kwargs):
 
         if self.Tipo=='Egreso':
@@ -147,7 +148,7 @@ class IngresoEgreso(Movimiento):
             self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible + self.Cantidad
             self.Objeto.save()
             super(IngresoEgreso, self).save(*args, **kwargs)
-
+'''
 class Acta(models.Model):
     Prestador = models.ForeignKey(Prestador)
     Fecha_vencimiento = models.DateField(default=datetime.now(),null=True)
@@ -155,6 +156,15 @@ class Acta(models.Model):
 class Prestamo(Movimiento):
     Objeto = models.ForeignKey(Elemento)
     Acta = models.ForeignKey(Acta, null=True, blank=True)
+
+class FacturaIngreso(models.Model):
+    Acta = models.CharField(max_length=20,null=True,blank=True)
+    Proveedor= models.OneToOneField(Proveedor,null=True,blank=True)
+    Fecha = models.DateField()
+    IngresoEgreso = models.ManyToManyField(IngresoEgreso)
+    Descripcion = models.CharField(max_length=200,null=True,blank=True)
+
+
 '''
     def save(self, *args, **kwargs):
         if not self.pk or kwargs.get('force_insert', False):
