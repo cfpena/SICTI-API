@@ -28,8 +28,8 @@ class Persona(models.Model):
 
 @python_2_unicode_compatible
 class Proveedor(Persona):
-    RUC = models.CharField(max_length=10, validators=[solo_numeros],null=True,blank=True,unique=True)
-    Razon_Social = models.CharField(max_length=30, validators=[solo_letras])
+    RUC = models.CharField(max_length=10,null=True,blank=True,unique=True)
+    Razon_Social = models.CharField(max_length=30)
 
     def __str__(self):
         return smart_unicode(self.Razon_Social)
@@ -46,10 +46,10 @@ class Prestador(Persona):
         ('Estudiante' , 'Estudiante'),
         ('Externo', 'Externo')
     )
-    CI = models.CharField(max_length=10, validators=[solo_numeros],unique=True)
+    CI = models.CharField(max_length=10,unique=True)
     Matricula = models.CharField(max_length=9,unique=True,blank=True)
-    Nombre = models.CharField(max_length=30, validators=[solo_letras])
-    Apellido = models.CharField(max_length=30, validators=[solo_letras])
+    Nombre = models.CharField(max_length=30)
+    Apellido = models.CharField(max_length=30)
     Genero = models.CharField(
         max_length=2,
         choices=generoChoices,
@@ -67,8 +67,8 @@ class Prestador(Persona):
 
 @python_2_unicode_compatible
 class Elemento(models.Model):
-    Codigo = models.CharField(max_length=10, unique=True, validators=[alfanumericos])
-    Nombre = models.CharField(max_length=20, validators=[alfanumericos])
+    Codigo = models.CharField(max_length=10, unique=True, )
+    Nombre = models.CharField(max_length=20)
     Descripcion = models.CharField(max_length=40, blank=True)
     Stock = models.IntegerField(default=0)
     Stock_Disponible = models.IntegerField(default=0)
@@ -85,13 +85,13 @@ class Elemento(models.Model):
 
 @python_2_unicode_compatible
 class Dispositivo(Elemento):
-    CodigoEspol = models.CharField(max_length=10, validators=[alfanumericos], null=True, blank=True,
+    CodigoEspol = models.CharField(max_length=10, null=True, blank=True,
                                    default=None)
-    CodigoSenecyt = models.CharField(max_length=10, validators=[alfanumericos], null=True, blank=True,
+    CodigoSenecyt = models.CharField(max_length=10,null=True, blank=True,
                                      default=None)
-    Marca = models.CharField(max_length=30, blank=True, validators=[alfanumericos])
-    Modelo = models.CharField(max_length=30, blank=True, validators=[alfanumericos])
-    Serie = models.CharField(max_length=30, blank=True, validators=[alfanumericos])
+    Marca = models.CharField(max_length=30, blank=True)
+    Modelo = models.CharField(max_length=30, blank=True)
+    Serie = models.CharField(max_length=30, blank=True)
 
     def __str__(self):
         return smart_unicode(self.Nombre)
