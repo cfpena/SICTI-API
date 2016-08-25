@@ -159,6 +159,18 @@ class Prestamo(Movimiento):
     Objeto = models.ForeignKey(Elemento)
     Acta = models.ForeignKey(Acta, null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+
+        if self.Objeto.Stock_Disponible-self.Cantidad<0:
+            raise ValidationError('Stock no dispobible', code=0001)
+        else:
+            self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible-self.Cantidad
+            self.Objeto.save()
+            super(Prestamo, self).save(*args, **kwargs)
+
+
+
+
 class FacturaIngreso(models.Model):
     Acta = models.CharField(max_length=20,null=True,blank=True)
     Proveedor= models.OneToOneField(Proveedor,null=True,blank=True)
@@ -167,32 +179,15 @@ class FacturaIngreso(models.Model):
     Descripcion = models.CharField(max_length=200,null=True,blank=True)
 
 
-'''
-    def save(self, *args, **kwargs):
-        if not self.pk or kwargs.get('force_insert', False):
-            if self.Objeto.Stock_Disponible-self.Cantidad<0:
-                raise ValidationError('Objeto(s) no dispobible', code=0001)
-            else:
-                self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible-self.Cantidad
-                self.Objeto.save()
-                super(IngresoEgreso, self).save(*args, **kwargs)
-
-        super(IngresoEgreso, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return smart_unicode(self.Persona)
-'''
-
 class Devolucion(Movimiento):
     Prestamo = models.OneToOneField(Prestamo)
 
     def __str__(self):
         return smart_unicode(self.Prestamo)
 
-'''
     def save(self, *args, **kwargs):
         if not self.pk or kwargs.get('force_insert', False):
             self.Prestamo.Objeto.Stock_Disponible = self.Prestamo.Objeto.Stock_Disponible + self.Cantidad
-            self.Objeto.save()
-            super(IngresoEgreso, self).save(*args, **kwargs)
-'''
+            self.Prestamo.Objeto.save()
+            super(Devolucion, self).save(*args, **kwargs)
+
