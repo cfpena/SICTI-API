@@ -51,14 +51,14 @@ class Prestador(Persona):
     Nombre = models.CharField(max_length=30)
     Apellido = models.CharField(max_length=30)
     Genero = models.CharField(
-        max_length=2,
+        max_length=10,
         choices=generoChoices,
-        default='M', blank=True, null=True
+        default='Masculino', blank=True, null=True
     )
     Tipo = models.CharField(
-        max_length=2,
+        max_length=11,
         choices=tipoChoices,
-        default='E', blank=True, null=True
+        default='Trabajador', blank=True, null=True
     )
 
     def __str__(self):
