@@ -20,7 +20,7 @@ alfanumericos = RegexValidator(r'^[0-9a-zA-Z]*$','Solo alfanumericos')
 class Persona(models.Model):
     Email = models.EmailField(max_length=60, unique=True)
     Telefono = models.CharField(max_length=10,blank=True)
-    Direccion = models.CharField(max_length=100,blank=True)
+    Direccion = models.CharField(max_length=200,blank=True)
 
     def __str__(self):
         return smart_unicode(self.Email)
@@ -29,7 +29,7 @@ class Persona(models.Model):
 @python_2_unicode_compatible
 class Proveedor(Persona):
     RUC = models.CharField(max_length=10,null=True,blank=True,unique=True)
-    Razon_Social = models.CharField(max_length=30)
+    Razon_Social = models.CharField(max_length=50)
 
     def __str__(self):
         return smart_unicode(self.Razon_Social)
@@ -47,7 +47,7 @@ class Prestador(Persona):
         ('Externo', 'Externo')
     )
     CI = models.CharField(max_length=10,unique=True)
-    Matricula = models.CharField(max_length=9,unique=True,blank=True)
+    Matricula = models.CharField(max_length=10,blank=True,null=True)
     Nombre = models.CharField(max_length=30)
     Apellido = models.CharField(max_length=30)
     Genero = models.CharField(
@@ -68,8 +68,8 @@ class Prestador(Persona):
 @python_2_unicode_compatible
 class Elemento(models.Model):
     Codigo = models.CharField(max_length=10, unique=True, )
-    Nombre = models.CharField(max_length=20)
-    Descripcion = models.CharField(max_length=40, blank=True)
+    Nombre = models.CharField(max_length=50)
+    Descripcion = models.CharField(max_length=200, blank=True)
     Stock = models.IntegerField(default=0)
     Stock_Disponible = models.IntegerField(default=0)
     Imagen = models.ImageField(upload_to='items', blank=True,null=True)
@@ -85,13 +85,13 @@ class Elemento(models.Model):
 
 @python_2_unicode_compatible
 class Dispositivo(Elemento):
-    CodigoEspol = models.CharField(max_length=10, null=True, blank=True,
+    CodigoEspol = models.CharField(max_length=20, null=True, blank=True,
                                    default=None)
-    CodigoSenecyt = models.CharField(max_length=10,null=True, blank=True,
+    CodigoSenecyt = models.CharField(max_length=20,null=True, blank=True,
                                      default=None)
-    Marca = models.CharField(max_length=30, blank=True)
-    Modelo = models.CharField(max_length=30, blank=True)
-    Serie = models.CharField(max_length=30, blank=True)
+    Marca = models.CharField(max_length=50, blank=True)
+    Modelo = models.CharField(max_length=50, blank=True)
+    Serie = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return smart_unicode(self.Nombre)
