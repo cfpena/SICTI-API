@@ -101,9 +101,13 @@ class PrestamoViewSet(viewsets.ModelViewSet):
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
 
-class IngresoEgresoViewSet(viewsets.ModelViewSet):
-    queryset = IngresoEgreso.objects.all()
-    serializer_class = IngresoEgresoSerializer
+class IngresoEgresoElementoViewSet(viewsets.ModelViewSet):
+    queryset = IngresoEgresoElemento.objects.all()
+    serializer_class = IngresoEgresoElementoSerializer
+
+class IngresoEgresoDispositivoViewSet(viewsets.ModelViewSet):
+    queryset = IngresoEgresoDispositivo.objects.all()
+    serializer_class = IngresoEgresoDispositivoSerializer
 
 
 class ActaViewSet(viewsets.ModelViewSet):

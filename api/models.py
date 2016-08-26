@@ -120,8 +120,7 @@ class Movimiento(models.Model):
     Cantidad = models.IntegerField()
     Detalle = models.CharField(max_length=200,null=True,blank=True)
 
-
-class IngresoEgreso(Movimiento):
+class IngresoEgresoElemento(Movimiento):
     Objeto = models.ForeignKey(Elemento)
     tipoChoices = (
         ('Ingreso', 'Ingreso'),
@@ -142,12 +141,39 @@ class IngresoEgreso(Movimiento):
                 self.Objeto.Stock = self.Objeto.Stock-self.Cantidad
                 self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible-self.Cantidad
                 self.Objeto.save()
-                super(IngresoEgreso, self).save(*args, **kwargs)
+                super(IngresoEgresoElemento, self).save(*args, **kwargs)
         elif self.Tipo=='Ingreso':
             self.Objeto.Stock = self.Objeto.Stock + self.Cantidad
             self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible + self.Cantidad
             self.Objeto.save()
-            super(IngresoEgreso, self).save(*args, **kwargs)
+            super(IngresoEgresoElemento, self).save(*args, **kwargs)
+class IngresoEgresoDispositivo(Movimiento):
+    Objeto = models.ForeignKey(Dispositivo)
+    tipoChoices = (
+        ('Ingreso', 'Ingreso'),
+        ('Egreso', 'Egreso')
+    )
+    Tipo = models.CharField(
+        choices=tipoChoices,
+        max_length = 7
+
+    )
+
+    def save(self, *args, **kwargs):
+
+        if self.Tipo=='Egreso':
+            if self.Objeto.Stock_Disponible-self.Cantidad<0:
+                raise ValidationError('Stock no dispobible', code=0001)
+            else:
+                self.Objeto.Stock = self.Objeto.Stock-self.Cantidad
+                self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible-self.Cantidad
+                self.Objeto.save()
+                super(IngresoEgresoDispositivo, self).save(*args, **kwargs)
+        elif self.Tipo=='Ingreso':
+            self.Objeto.Stock = self.Objeto.Stock + self.Cantidad
+            self.Objeto.Stock_Disponible = self.Objeto.Stock_Disponible + self.Cantidad
+            self.Objeto.save()
+            super(IngresoEgresoDispositivo, self).save(*args, **kwargs)
 
 class Acta(models.Model):
     Fecha= models.DateField(auto_now=True)
@@ -175,7 +201,8 @@ class FacturaIngreso(models.Model):
     Acta = models.CharField(max_length=20,null=True,blank=True)
     Proveedor= models.OneToOneField(Proveedor,null=True,blank=True)
     Fecha = models.DateField()
-    IngresoEgreso = models.ManyToManyField(IngresoEgreso,null=True,blank=True)
+    IngresoEgresoElementos = models.ManyToManyField(IngresoEgresoElemento,null=True,blank=True)
+    IngresoEgresoDispositivos = models.ManyToManyField(IngresoEgresoDispositivo, null=True, blank=True)
     Descripcion = models.CharField(max_length=200,null=True,blank=True)
 
 

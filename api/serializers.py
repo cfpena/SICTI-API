@@ -94,10 +94,16 @@ class PrestamoSerializer(serializers.HyperlinkedModelSerializer):
         model = Prestamo
         fields = '__all__'
 
-class IngresoEgresoSerializer(serializers.HyperlinkedModelSerializer):
+class IngresoEgresoElementoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = IngresoEgreso
+        model = IngresoEgresoElemento
+        fields = '__all__'
+
+class IngresoEgresoDispositivoSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = IngresoEgresoDispositivo
         fields = '__all__'
 
 class ActaSerializer(serializers.HyperlinkedModelSerializer):
