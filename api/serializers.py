@@ -53,7 +53,7 @@ class PrestadorSerializer(serializers.HyperlinkedModelSerializer):
         model = Prestador
         fields = '__all__'
 
-
+'''
 class ElementoSerializer(serializers.HyperlinkedModelSerializer):
     Stock_Disponible = serializers.CharField(read_only=True)
     Stock = serializers.CharField(read_only=True)
@@ -71,7 +71,15 @@ class DispositivoSerializer(serializers.HyperlinkedModelSerializer):
         model = Dispositivo
         fields = '__all__'
         depth = 1
+'''
 
+class ItemSerializer(serializers.HyperlinkedModelSerializer):
+    Stock_Disponible = serializers.CharField(read_only=True)
+    Stock = serializers.CharField(read_only=True)
+    class Meta:
+        model = Item
+        fields = '__all__'
+        depth = 1
 
 class KitSerializer(serializers.HyperlinkedModelSerializer):
     Stock_Disponible = serializers.CharField(read_only=True)
@@ -94,17 +102,12 @@ class PrestamoSerializer(serializers.HyperlinkedModelSerializer):
         model = Prestamo
         fields = '__all__'
 
-class IngresoEgresoElementoSerializer(serializers.HyperlinkedModelSerializer):
+class IngresoEgresoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = IngresoEgresoElemento
+        model = IngresoEgreso
         fields = '__all__'
 
-class IngresoEgresoDispositivoSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = IngresoEgresoDispositivo
-        fields = '__all__'
 
 class ActaSerializer(serializers.HyperlinkedModelSerializer):
     Prestamo = PrestamoSerializer

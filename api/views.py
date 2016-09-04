@@ -16,10 +16,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username','first_name','last_name')
     queryset = User.objects.exclude(is_superuser=True)
@@ -27,9 +23,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
@@ -59,8 +52,8 @@ class PrestadorViewSet(viewsets.ModelViewSet):
 class ElementoViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ("Codigo","Nombre")
-    queryset = Elemento.objects.filter(dispositivo=None)
-    serializer_class = ElementoSerializer
+    queryset = Item.objects.filter(Es_Dispositivo=False)
+    serializer_class = ItemSerializer
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -69,11 +62,25 @@ class ElementoViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response({ 'detail': 'Objecto modificado correctamente' })
 
+class ElementoUltimoViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all().filter(Es_Dispositivo=False).reverse()[1:]
+    serializer_class = ItemSerializer
+
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all().filter(kit=None)
+    serializer_class = ItemSerializer
+
+
+class DispositivoUltimoViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all().filter(Es_Dispositivo=True).reverse()[1:]
+    serializer_class = ItemSerializer
+
+
 class DispositivoViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ("Codigo","Nombre")
-    queryset = Dispositivo.objects.filter(kit=None)
-    serializer_class = DispositivoSerializer
+    queryset = Item.objects.filter(Es_Dispositivo=True)
+    serializer_class = ItemSerializer
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -93,6 +100,11 @@ class KitViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response({ 'detail': 'Objecto modificado correctamente' })
+
+class KitUltimoViewSet(viewsets.ModelViewSet):
+    queryset = Kit.objects.all().filter().reverse()[1:]
+    serializer_class = KitSerializer
+
 class KitElementoViewSet(viewsets.ModelViewSet):
     queryset = KitContieneElemento.objects.all()
     serializer_class = KitContieneElementoSerializer
@@ -101,19 +113,21 @@ class PrestamoViewSet(viewsets.ModelViewSet):
     queryset = Prestamo.objects.all()
     serializer_class = PrestamoSerializer
 
-class IngresoEgresoElementoViewSet(viewsets.ModelViewSet):
-    queryset = IngresoEgresoElemento.objects.all()
-    serializer_class = IngresoEgresoElementoSerializer
+class IngresoEgresoViewSet(viewsets.ModelViewSet):
+    queryset = IngresoEgreso.objects.all()
+    serializer_class = IngresoEgresoSerializer
 
-class IngresoEgresoDispositivoViewSet(viewsets.ModelViewSet):
-    queryset = IngresoEgresoDispositivo.objects.all()
-    serializer_class = IngresoEgresoDispositivoSerializer
+
 
 
 class ActaViewSet(viewsets.ModelViewSet):
     #filter_backends = (filters.SearchFilter,)
     #search_fields = ('Cedula,''Nombre','Apellido','Email','Telefono','Genero')
     queryset = Acta.objects.all()
+    serializer_class = ActaSerializer
+
+class ActaUltimoViewSet(viewsets.ModelViewSet):
+    queryset = Acta.objects.all().filter().reverse()[1:]
     serializer_class = ActaSerializer
 
 class DevolucionViewSet(viewsets.ModelViewSet):

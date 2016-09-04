@@ -12,11 +12,15 @@ router.register(r'dispositivos', views.DispositivoViewSet)
 router.register(r'kits', views.KitViewSet)
 router.register(r'kitelemento', views.KitElementoViewSet)
 router.register(r'prestamos', views.PrestamoViewSet)
-router.register(r'ingresosegresoselementos', views.IngresoEgresoElementoViewSet)
-router.register(r'ingresosegresosdispositivos', views.IngresoEgresoDispositivoViewSet)
+router.register(r'ingresosegreso', views.IngresoEgresoViewSet)
 router.register(r'actas', views.ActaViewSet)
 router.register(r'devoluciones', views.DevolucionViewSet)
 router.register(r'facturaingreso', views.FacturaIngresoViewSet)
+router.register(r'ultimoelemento', views.ElementoUltimoViewSet)
+router.register(r'ultimodispositivo', views.DispositivoUltimoViewSet)
+router.register(r'ultimaacta', views.ActaUltimoViewSet)
+router.register(r'ultimokit', views.KitUltimoViewSet)
+router.register(r'items', views.ItemViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
