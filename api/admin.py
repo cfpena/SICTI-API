@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 admin.site.register(Proveedor)
 admin.site.register(Item)
 admin.site.register(Kit)
-admin.site.register(KitContieneElemento)
+admin.site.register(KitDetalle)
 admin.site.register(Prestador)
 admin.site.register(Prestamo)
 admin.site.register(IngresoEgreso)

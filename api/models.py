@@ -98,10 +98,7 @@ class Dispositivo(Elemento):
     '''
 @python_2_unicode_compatible
 class Item(models.Model):
-    CodigoEspol = models.CharField(max_length=20, null=True, blank=True,
-                                   default=None)
-    CodigoSenecyt = models.CharField(max_length=20,null=True, blank=True,
-                                     default=None)
+
     Marca = models.CharField(max_length=50, blank=True)
     Modelo = models.CharField(max_length=50, blank=True)
     Serie = models.CharField(max_length=50, blank=True)
@@ -111,7 +108,7 @@ class Item(models.Model):
     Stock = models.IntegerField(default=0)
     Stock_Disponible = models.IntegerField(default=0)
     Imagen = models.ImageField(upload_to='items', blank=True, null=True)
-    Proveedor = models.ForeignKey(Proveedor, null=True, blank=True, default=None)
+    Proveedor = models.ForeignKey(Prestador, null=True, blank=True, default=None)
     Es_Dispositivo= models.BooleanField()
 
     def save(self, *args, **kwargs):
@@ -125,22 +122,17 @@ class Item(models.Model):
     def __str__(self):
         return smart_unicode(self.Nombre)
 
+class KitDetalle(models.Model):
+    Cantidad= models.IntegerField(default=0)
+    Item= models.ForeignKey(Item,related_name='elemento')
 
 @python_2_unicode_compatible
 class Kit(Item):
-    Items = models.ManyToManyField(Item,related_name='elementos', through='KitContieneElemento',null=True,blank=True)
+    KitDetalle = models.ManyToManyField(KitDetalle,related_name='detalles',null=True,blank=True)
 
 
     def __str__(self):
         return smart_unicode(self.Nombre)
-
-class KitContieneElemento(models.Model):
-    Cantidad= models.IntegerField(default=0)
-    Kit = models.ForeignKey(Kit,related_name='kit')
-    Item= models.ForeignKey(Item,related_name='elemento')
-
-
-
 
 
 class Movimiento(models.Model):
@@ -175,35 +167,7 @@ class IngresoEgreso(Movimiento):
             self.Item.Stock_Disponible = self.Item.Stock_Disponible + self.Cantidad
             self.Item.save()
             super(IngresoEgreso, self).save(*args, **kwargs)
-'''
-class IngresoEgresoDispositivo(Movimiento):
-    Item = models.ForeignKey(Dispositivo)
-    tipoChoices = (
-        ('Ingreso', 'Ingreso'),
-        ('Egreso', 'Egreso')
-    )
-    Tipo = models.CharField(
-        choices=tipoChoices,
-        max_length = 7
 
-    )
-
-    def save(self, *args, **kwargs):
-
-        if self.Tipo=='Egreso':
-            if self.Item.Stock_Disponible-self.Cantidad<0:
-                raise ValidationError('Stock no dispobible', code=0001)
-            else:
-                self.Item.Stock = self.Item.Stock-self.Cantidad
-                self.Item.Stock_Disponible = self.Item.Stock_Disponible-self.Cantidad
-                self.Item.save()
-                super(IngresoEgresoDispositivo, self).save(*args, **kwargs)
-        elif self.Tipo=='Ingreso':
-            self.Item.Stock = self.Item.Stock + self.Cantidad
-            self.Item.Stock_Disponible = self.Item.Stock_Disponible + self.Cantidad
-            self.Item.save()
-            super(IngresoEgresoDispositivo, self).save(*args, **kwargs)
-'''
 class Acta(models.Model):
     Fecha= models.DateField(auto_now=True)
     Codigo = models.CharField(max_length=20,null=True,blank=True)

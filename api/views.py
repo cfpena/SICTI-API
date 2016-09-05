@@ -105,9 +105,9 @@ class KitUltimoViewSet(viewsets.ModelViewSet):
     queryset = Kit.objects.all().filter().reverse()[1:]
     serializer_class = KitSerializer
 
-class KitElementoViewSet(viewsets.ModelViewSet):
-    queryset = KitContieneElemento.objects.all()
-    serializer_class = KitContieneElementoSerializer
+class KitDetalleViewSet(viewsets.ModelViewSet):
+    queryset = KitDetalle.objects.all()
+    serializer_class = KitDetalleSerializer
 
 class PrestamoViewSet(viewsets.ModelViewSet):
     queryset = Prestamo.objects.all()

@@ -90,10 +90,10 @@ class KitSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class KitContieneElementoSerializer(serializers.HyperlinkedModelSerializer):
+class KitDetalleSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = KitContieneElemento
+        model = KitDetalle
         fields = '__all__'
 
 class PrestamoSerializer(serializers.HyperlinkedModelSerializer):
