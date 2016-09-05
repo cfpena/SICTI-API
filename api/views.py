@@ -67,6 +67,8 @@ class ElementoUltimoViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
 
 class ItemViewSet(viewsets.ModelViewSet):
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("Codigo", "Nombre","Marca","Modelo")
     queryset = Item.objects.all().filter(kit=None)
     serializer_class = ItemSerializer
 
