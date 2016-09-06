@@ -81,6 +81,13 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
         depth = 1
 
+class ItemReporteSerializer(serializers.HyperlinkedModelSerializer):
+    Stock_Disponible = serializers.CharField(read_only=True)
+    Stock = serializers.CharField(read_only=True)
+    class Meta:
+        model = Item
+        fields = ('Codigo','Nombre','Stock','Stock_Disponible')
+
 class ElementoSerializer(serializers.HyperlinkedModelSerializer):
     Stock_Disponible = serializers.CharField(read_only=True)
     Stock = serializers.CharField(read_only=True)

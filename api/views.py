@@ -173,6 +173,17 @@ class ReportePrestamo(APIView):
         serializer = PrestamoSerializer(query,context=serializer_context,many=True)
         return Response(serializer.data)
 
+class ReporteExistencias(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
+        query = Item.objects.all()
+        serializer_context = {
+            'request': Request(request),
+        }
+        serializer = ItemReporteSerializer(query,context=serializer_context,many=True)
+        return Response(serializer.data)
+
 '''
 class UsuarioViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
