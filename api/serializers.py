@@ -81,6 +81,22 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
         depth = 1
 
+class ElementoSerializer(serializers.HyperlinkedModelSerializer):
+    Stock_Disponible = serializers.CharField(read_only=True)
+    Stock = serializers.CharField(read_only=True)
+    class Meta:
+        model = Item
+        fields = '__all__'
+        depth = 1
+
+class DispositivoSerializer(serializers.HyperlinkedModelSerializer):
+    Stock_Disponible = serializers.CharField(read_only=True)
+    Stock = serializers.CharField(read_only=True)
+    class Meta:
+        model = Item
+        fields = '__all__'
+        depth = 1
+
 class KitSerializer(serializers.HyperlinkedModelSerializer):
     Stock_Disponible = serializers.CharField(read_only=True)
     Stock = serializers.CharField(read_only=True)

@@ -64,7 +64,11 @@ class ElementoViewSet(viewsets.ModelViewSet):
 
 class ElementoUltimoViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all().filter(Es_Dispositivo=False).reverse()[1:]
-    serializer_class = ItemSerializer
+    serializer_class = ElementoSerializer
+
+class DispositivoUltimoViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all().filter(Es_Dispositivo=True).reverse()[1:]
+    serializer_class = DispositivoSerializer
 
 class ItemViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
@@ -73,9 +77,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
 
 
-class DispositivoUltimoViewSet(viewsets.ModelViewSet):
-    queryset = Item.objects.all().filter(Es_Dispositivo=True).reverse()[1:]
-    serializer_class = ItemSerializer
+
 
 
 class DispositivoViewSet(viewsets.ModelViewSet):
