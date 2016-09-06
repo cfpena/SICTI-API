@@ -63,11 +63,11 @@ class ElementoViewSet(viewsets.ModelViewSet):
             return Response({ 'detail': 'Objecto modificado correctamente' })
 
 class ElementoUltimoViewSet(viewsets.ModelViewSet):
-    queryset = Item.objects.all().filter(Es_Dispositivo=False).reverse()[1:]
+    queryset = Item.objects.all().filter(Es_Dispositivo=False).reverse()[:1]
     serializer_class = ElementoSerializer
 
 class DispositivoUltimoViewSet(viewsets.ModelViewSet):
-    queryset = Item.objects.all().filter(Es_Dispositivo=True).reverse()[1:]
+    queryset = Item.objects.all().filter(Es_Dispositivo=True).reverse()[:1]
     serializer_class = DispositivoSerializer
 
 class ItemViewSet(viewsets.ModelViewSet):
@@ -92,6 +92,11 @@ class DispositivoViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response({ 'detail': 'Objecto modificado correctamente' })
+
+class KitUltimoViewSet(viewsets.ModelViewSet):
+    queryset = Kit.objects.all().filter().reverse()[:1]
+    serializer_class = KitUltimoSerializer
+
 class KitViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ("Codigo","Nombre")
@@ -105,9 +110,7 @@ class KitViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response({ 'detail': 'Objecto modificado correctamente' })
 
-class KitUltimoViewSet(viewsets.ModelViewSet):
-    queryset = Kit.objects.all().filter().reverse()[1:]
-    serializer_class = KitSerializer
+
 
 class KitDetalleViewSet(viewsets.ModelViewSet):
     queryset = KitDetalle.objects.all()

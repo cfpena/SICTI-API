@@ -104,6 +104,13 @@ class KitSerializer(serializers.HyperlinkedModelSerializer):
         model = Kit
         fields = '__all__'
 
+class KitUltimoSerializer(serializers.HyperlinkedModelSerializer):
+    Stock_Disponible = serializers.CharField(read_only=True)
+    Stock = serializers.CharField(read_only=True)
+    class Meta:
+        model = Kit
+        fields = '__all__'
+
 
 
 class KitDetalleSerializer(serializers.HyperlinkedModelSerializer):

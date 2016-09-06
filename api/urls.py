@@ -9,6 +9,7 @@ router.register(r'grupos', views.GroupViewSet)
 router.register(r'prestador', views.PrestadorViewSet)
 router.register(r'elementos', views.ElementoViewSet)
 router.register(r'dispositivos', views.DispositivoViewSet)
+router.register(r'ultimokit', views.KitUltimoViewSet)
 router.register(r'kits', views.KitViewSet)
 router.register(r'kitdetalle', views.KitDetalleViewSet)
 router.register(r'prestamos', views.PrestamoViewSet)
@@ -19,7 +20,7 @@ router.register(r'facturaingreso', views.FacturaIngresoViewSet)
 router.register(r'ultimoelemento', views.ElementoUltimoViewSet)
 router.register(r'ultimodispositivo', views.DispositivoUltimoViewSet)
 router.register(r'ultimaacta', views.ActaUltimoViewSet)
-router.register(r'ultimokit', views.KitUltimoViewSet)
+
 router.register(r'items', views.ItemViewSet)
 
 urlpatterns = [
