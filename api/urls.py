@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^password/$',views.AccountPassword.as_view()),
     url(r'reporteinventario', views.ReporteInventario.as_view()),
     url(r'reporteprestamo', views.ReportePrestamo.as_view()),
-    url(r'reporteexistencia', views.ReporteExistencias.as_view())
+    url(r'reporteexistencia', views.ReporteExistencias.as_view()),
+    url(r'itemupload', views.ItemUploadViewSet.as_view())
 ]
 

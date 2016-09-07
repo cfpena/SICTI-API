@@ -14,6 +14,10 @@ from .models import *
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
+from rest_framework.parsers import FormParser,MultiPartParser
+from base64 import b64decode, b64encode,decodestring
+from django.core.files.base import ContentFile
+import uuid
 
 class UserViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
@@ -75,6 +79,29 @@ class ItemViewSet(viewsets.ModelViewSet):
     search_fields = ("Codigo", "Nombre","Marca","Modelo")
     queryset = Item.objects.all().filter(kit=None)
     serializer_class = ItemSerializer
+
+
+class ItemUploadViewSet(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        if(request.data['Imagen'] and request.data['Imagen']!='' and request.data['Imagen']!='{}'):
+            imagen=request.data['Imagen']
+            data=imagen['data']
+            format, imgstr = data.split(';base64,')  # format ~= data:image/X,
+            ext = format.split('/')[-1]  # guess file extension
+            id = uuid.uuid4()
+
+            img = ContentFile(decodestring(imgstr), name=id.urn[9:] + '.' + ext)
+            serializer_context = {
+                'request': Request(request),
+            }
+            request.data['Imagen']=img
+
+            print("antes")
+            serializer = ItemSerializer(data=request.data)
+            return Response("OK")
+
 
 
 

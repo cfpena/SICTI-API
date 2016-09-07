@@ -76,10 +76,18 @@ class DispositivoSerializer(serializers.HyperlinkedModelSerializer):
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
     Stock_Disponible = serializers.CharField(read_only=True)
     Stock = serializers.CharField(read_only=True)
+
     class Meta:
         model = Item
         fields = '__all__'
         depth = 1
+
+    def create(self, validated_data):
+        img = validated_data['Imagen']
+        print(img)
+        #validated_data['Imagen'] = None
+        item = Item.objects.create(**validated_data)
+        return item
 
 class IdentificacionesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -92,6 +100,8 @@ class ItemReporteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Item
         fields = ('Codigo','Nombre','Stock','Stock_Disponible')
+
+
 
 class ElementoSerializer(serializers.HyperlinkedModelSerializer):
     Stock_Disponible = serializers.CharField(read_only=True)
