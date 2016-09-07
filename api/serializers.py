@@ -115,7 +115,7 @@ class KitDetalleSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 class KitSerializer(serializers.HyperlinkedModelSerializer):
-    KitDetalle = KitDetalleSerializer
+    KitDetalle = KitDetalleSerializer(many=True)
     Stock_Disponible = serializers.CharField(read_only=True)
     Stock = serializers.CharField(read_only=True)
     class Meta:
