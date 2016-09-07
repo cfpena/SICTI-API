@@ -118,6 +118,24 @@ class KitSerializer(serializers.HyperlinkedModelSerializer):
     KitDetalle = KitDetalleSerializer(many=True)
     Stock_Disponible = serializers.CharField(read_only=True)
     Stock = serializers.CharField(read_only=True)
+
+    def create(self, validated_data):
+        detalles = validated_data.get('KitDetalle')
+        kit =Kit.objects.create(Marca=validated_data['Marca'],
+                           Modelo=validated_data['Modelo'],
+                           Serie=validated_data['Serie'],
+                           Codigo=validated_data['Codigo'],
+                           Nombre=validated_data['Nombre'],
+                           Descripcion=validated_data['Descripcion'],
+                                Es_Dispositivo=False)
+        for detalle in detalles:
+            creado = KitDetalle.objects.create(Cantidad=detalle['Cantidad'],
+                                      Item=detalle['Item'])
+            kit.KitDetalle.add(creado)
+
+
+        return kit
+
     class Meta:
         model = Kit
         fields = '__all__'

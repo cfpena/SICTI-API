@@ -134,7 +134,7 @@ class KitDetalle(models.Model):
 
 @python_2_unicode_compatible
 class Kit(Item):
-    KitDetalle = models.ManyToManyField(KitDetalle,related_name='detalles',null=True,blank=True)
+    KitDetalle = models.ManyToManyField(KitDetalle,null=True,blank=True)
 
 
     def __str__(self):
