@@ -133,6 +133,12 @@ class ActaViewSet(viewsets.ModelViewSet):
     queryset = Acta.objects.all()
     serializer_class = ActaSerializer
 
+class IdentificacionesViewSet(viewsets.ModelViewSet):
+    #filter_backends = (filters.SearchFilter,)
+    #search_fields = ('Cedula,''Nombre','Apellido','Email','Telefono','Genero')
+    queryset = Identificaciones.objects.all()
+    serializer_class = IdentificacionesSerializer
+
 class ActaUltimoViewSet(viewsets.ModelViewSet):
     queryset = Acta.objects.all().filter().reverse()[1:]
     serializer_class = ActaSerializer

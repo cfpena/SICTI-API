@@ -20,6 +20,7 @@ router.register(r'ingresosegresos', views.IngresoEgresoViewSet)
 router.register(r'actas', views.ActaViewSet)
 router.register(r'devoluciones', views.DevolucionViewSet)
 router.register(r'facturaingreso', views.FacturaIngresoViewSet)
+router.register(r'identificaciones', views.IdentificacionesViewSet)
 
 
 router.register(r'items', views.ItemViewSet)

@@ -96,6 +96,11 @@ class Dispositivo(Elemento):
     def __str__(self):
         return smart_unicode(self.Nombre)
     '''
+class Identificaciones(models.Model):
+    Codigo_Espol = models.CharField(max_length=50,blank=True,null=True )
+    Codigo_Senecyt = models.CharField(max_length=50,blank=True,null=True )
+    Serie = models.CharField(max_length=50, blank=True,null=True )
+
 @python_2_unicode_compatible
 class Item(models.Model):
 
@@ -110,6 +115,7 @@ class Item(models.Model):
     Imagen = models.ImageField(upload_to='items', blank=True, null=True)
     Proveedor = models.ForeignKey(Prestador, null=True, blank=True, default=None)
     Es_Dispositivo= models.BooleanField()
+    Identificaciones= models.ManyToManyField(Identificaciones,blank=True,default=None)
 
     def save(self, *args, **kwargs):
         if not self.pk or kwargs.get('force_insert', False):

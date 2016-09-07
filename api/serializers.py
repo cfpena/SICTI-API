@@ -81,6 +81,11 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
         depth = 1
 
+class IdentificacionesSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Identificaciones
+        fields = '__all__'
+
 class ItemReporteSerializer(serializers.HyperlinkedModelSerializer):
     Stock_Disponible = serializers.CharField(read_only=True)
     Stock = serializers.CharField(read_only=True)
@@ -103,8 +108,14 @@ class DispositivoSerializer(serializers.HyperlinkedModelSerializer):
         model = Item
         fields = '__all__'
         depth = 1
+class KitDetalleSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = KitDetalle
+        fields = '__all__'
 
 class KitSerializer(serializers.HyperlinkedModelSerializer):
+    KitDetalle = KitDetalleSerializer
     Stock_Disponible = serializers.CharField(read_only=True)
     Stock = serializers.CharField(read_only=True)
     class Meta:
@@ -120,11 +131,7 @@ class KitUltimoSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class KitDetalleSerializer(serializers.HyperlinkedModelSerializer):
 
-    class Meta:
-        model = KitDetalle
-        fields = '__all__'
 
 class PrestamoSerializer(serializers.HyperlinkedModelSerializer):
 
