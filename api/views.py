@@ -85,26 +85,30 @@ class ItemUploadViewSet(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, format=None):
-        if(request.data['Imagen'] and request.data['Imagen']!='' and request.data['Imagen']!='{}'):
-            imagen=request.data['Imagen']
+
+
+        imagen=request.data['Imagen']
+        print(imagen)
+        if(imagen!=None):
             data=imagen['data']
             format, imgstr = data.split(';base64,')  # format ~= data:image/X,
             ext = format.split('/')[-1]  # guess file extension
             id = uuid.uuid4()
 
             img = ContentFile(decodestring(imgstr), name=id.urn[9:] + '.' + ext)
-            serializer_context = {
-                'request': Request(request),
-            }
-            request.data['Imagen']=img
+            request.data['Imagen'] = img
 
-            print("antes")
-            serializer = ItemSerializer(data=request.data)
-            if(serializer.is_valid()):
-                serializer.save()
-                return Response("OK")
-            else:
-                return Response(serializer.errors)
+        serializer_context = {
+            'request': Request(request),
+        }
+
+
+        serializer = ItemSerializer(data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response("OK")
+        else:
+            return Response(serializer.errors)
 
 
 
