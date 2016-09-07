@@ -100,7 +100,11 @@ class ItemUploadViewSet(APIView):
 
             print("antes")
             serializer = ItemSerializer(data=request.data)
-            return Response("OK")
+            if(serializer.is_valid()):
+                serializer.save()
+                return Response("OK")
+            else:
+                return Response(serializer.errors)
 
 
 
