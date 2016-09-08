@@ -287,54 +287,131 @@ class ReporteInventarioPDF(APIView):
         buff.close()
         return response
 
-'''
-class UsuarioViewSet(viewsets.ModelViewSet):
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('Nombre','Apellido','Email','Telefono','Genero','id')
-    queryset = Persona.objects.exclude(Usuario=None)
-    serializer_class = UsuarioSerializer
-    def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.serializer_class(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({ 'detail': 'Object successfully changed' })
 
 
-class ItemViewSet(viewsets.ModelViewSet):
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ("Codigo","Nombre","Marca","Modelo","Is_dispositivo")
-    queryset = Item.objects.filter(Is_kit=False)
-    serializer_class = ItemSerializer
 
-    def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.serializer_class(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({ 'detail': 'Object successfully changed' })
+class ReportePrestamoPDF(APIView):
+    permission_classes = (IsAuthenticated,)
 
-class KitViewSet(viewsets.ModelViewSet):
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ("Codigo","Nombre","Marca","Modelo")
-    queryset = Item.objects.filter(Is_kit=True)
-    serializer_class = KitSerializer
-    def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.serializer_class(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({ 'detail': 'Object successfully changed' })
-class PrestamoViewSet(viewsets.ModelViewSet):
-    #filter_backends = (filters.SearchFilter,)
-    #search_fields = ("Codigo","Nombre","Marca","Modelo")
-    queryset = Prestamo.objects.all()
-    serializer_class = PrestamoSerializer
-class MovimientoViewSet(viewsets.ModelViewSet):
-    #filter_backends = (filters.SearchFilter,)
-    #search_fields = ("Codigo","Nombre","Marca","Modelo")
-    queryset = Movimiento.objects.all()
-    serializer_class = MovimientoSerializer
+    def post(self, request, format=None):
+        fechaInicio=request.data['Fecha_Inicial']
+        fechaFin=request.data['Fecha_Final']
+        query = Prestamo.objects.filter(Fecha__range=(fechaInicio,fechaFin))
 
-# Create your views here.
-'''
+
+
+        response = HttpResponse(content_type='application/pdf')
+        pdf_name = "menu-%s.pdf" % str('reporte')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+        buff = BytesIO()
+
+        menu_pdf = SimpleDocTemplate(buff, rightMargin=72,
+                                     leftMargin=72, topMargin=72, bottomMargin=18)
+
+        # container for pdf elements
+        elements = []
+
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='centered', alignment=TA_CENTER))
+
+
+        formatted_time = time.ctime()
+        ptext = '<font size=12>%s</font>' % formatted_time
+
+        elements.append(Paragraph(ptext, styles["Normal"]))
+        elements.append(Spacer(1, 12))
+        ptext = '<b><font size=16>%s</font></b>' % 'Reporte de Prestamos'
+        elements.append(Paragraph(ptext, styles["centered"]))
+        elements.append(Spacer(1, 30))
+        data = []
+        headers=['Fecha','Nombre','Item','Cantidad','Acta','Detalle']
+        data.append(headers)
+        for dato in query:
+            movimiento=[]
+            ptext = '<b><font size=12>%s</font></b>' % str(dato.Fecha)
+            movimiento.append(Paragraph(ptext,styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % (str(dato.Acta.Prestador.Nombre) +' '+ (dato.Acta.Prestador.Apellido))
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Item.Nombre
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Cantidad
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Acta.Codigo
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Detalle
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            data.append(movimiento)
+        table=Table(data)
+        elements.append(table)
+
+
+        # Add the content as before then...
+
+        menu_pdf.build(elements)
+        response.write(buff.getvalue())
+        buff.close()
+        return response
+
+
+class ReporteExistenciasPDF(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
+
+        query = Item.objects.all()
+
+
+
+        response = HttpResponse(content_type='application/pdf')
+        pdf_name = "menu-%s.pdf" % str('reporte')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+        buff = BytesIO()
+
+        menu_pdf = SimpleDocTemplate(buff, rightMargin=72,
+                                     leftMargin=72, topMargin=72, bottomMargin=18)
+
+        # container for pdf elements
+        elements = []
+
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='centered', alignment=TA_CENTER))
+
+
+        formatted_time = time.ctime()
+        ptext = '<font size=12>%s</font>' % formatted_time
+
+        elements.append(Paragraph(ptext, styles["Normal"]))
+        elements.append(Spacer(1, 12))
+        ptext = '<b><font size=16>%s</font></b>' % 'Reporte de Existencias'
+        elements.append(Paragraph(ptext, styles["centered"]))
+        elements.append(Spacer(1, 30))
+        data = []
+        headers=['Codigo','Nombre','Marca','Modelo','Stock','Disponible']
+        data.append(headers)
+        for dato in query:
+            movimiento=[]
+            ptext = '<b><font size=12>%s</font></b>' % str(dato.Codigo)
+            movimiento.append(Paragraph(ptext,styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % (str(dato.Nombre))
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Marca
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Modelo
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Stock
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Stock_Disponible
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            data.append(movimiento)
+        table=Table(data)
+        elements.append(table)
+
+
+        # Add the content as before then...
+
+        menu_pdf.build(elements)
+        response.write(buff.getvalue())
+        buff.close()
+        return response
