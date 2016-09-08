@@ -28,6 +28,7 @@ router.register(r'items', views.ItemViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^password/$',views.AccountPassword.as_view()),
+    url(r'reporteinventariopdf', views.ReporteInventarioPDF.as_view()),
     url(r'reporteinventario', views.ReporteInventario.as_view()),
     url(r'reporteprestamo', views.ReportePrestamo.as_view()),
     url(r'reporteexistencia', views.ReporteExistencias.as_view()),

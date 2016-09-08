@@ -1,23 +1,25 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User, Group
 from rest_framework import viewsets,filters
-from tokenapi.decorators import token_required
-from tokenapi.http import JsonResponse, JsonError
-from rest_framework.decorators import api_view
-from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .serializers import *
 from .models import *
 from rest_framework import generics
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
 from rest_framework.parsers import FormParser,MultiPartParser
 from base64 import b64decode, b64encode,decodestring
 from django.core.files.base import ContentFile
 import uuid
+from reportlab.lib.enums import TA_JUSTIFY
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer,  Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle,TA_CENTER,TA_LEFT
+from reportlab.lib import colors
+from io import BytesIO
+from django.http import HttpResponse
+from datetime import datetime
+import time
+
 
 class UserViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
@@ -88,7 +90,6 @@ class ItemUploadViewSet(APIView):
 
 
         imagen=request.data['Imagen']
-        print(imagen)
         if(imagen!=None):
             data=imagen['data']
             format, imgstr = data.split(';base64,')  # format ~= data:image/X,
@@ -224,6 +225,67 @@ class ReporteExistencias(APIView):
         }
         serializer = ItemReporteSerializer(query,context=serializer_context,many=True)
         return Response(serializer.data)
+
+class ReporteInventarioPDF(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        fechaInicio=request.data['Fecha_Inicial']
+        fechaFin=request.data['Fecha_Final']
+        query = IngresoEgreso.objects.filter(Fecha__range=(fechaInicio,fechaFin))
+
+
+
+        response = HttpResponse(content_type='application/pdf')
+        pdf_name = "menu-%s.pdf" % str('reporte')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+        buff = BytesIO()
+
+        menu_pdf = SimpleDocTemplate(buff, rightMargin=72,
+                                     leftMargin=72, topMargin=72, bottomMargin=18)
+
+        # container for pdf elements
+        elements = []
+
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='centered', alignment=TA_CENTER))
+
+
+        formatted_time = time.ctime()
+        ptext = '<font size=12>%s</font>' % formatted_time
+
+        elements.append(Paragraph(ptext, styles["Normal"]))
+        elements.append(Spacer(1, 12))
+        ptext = '<b><font size=16>%s</font></b>' % 'Reporte de Inventario'
+        elements.append(Paragraph(ptext, styles["centered"]))
+        elements.append(Spacer(1, 30))
+        data = []
+        headers=['Fecha','Nombre','Cantidad','Tipo','Detalle']
+        data.append(headers)
+        for dato in query:
+            movimiento=[]
+            ptext = '<b><font size=12>%s</font></b>' % str(dato.Fecha)
+            movimiento.append(Paragraph(ptext,styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Item.Nombre
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Cantidad
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Tipo
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<b><font size=12>%s</font></b>' % dato.Detalle
+            movimiento.append(Paragraph(ptext, styles["Normal"]))
+            data.append(movimiento)
+        table=Table(data)
+        elements.append(table)
+
+
+        # Add the content as before then...
+
+        menu_pdf.build(elements)
+        response.write(buff.getvalue())
+        buff.close()
+        return response
 
 '''
 class UsuarioViewSet(viewsets.ModelViewSet):
