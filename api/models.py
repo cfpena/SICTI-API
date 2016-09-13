@@ -198,7 +198,7 @@ class Prestamo(Movimiento):
 
 class FacturaIngreso(models.Model):
     Acta = models.CharField(max_length=20,null=True,blank=True)
-    Proveedor= models.OneToOneField(Prestador,null=True,blank=True)
+    Proveedor= models.ForeignKey(Prestador,null=True,blank=True)
     Fecha = models.DateField()
     IngresoEgreso = models.ManyToManyField(IngresoEgreso,null=True,blank=True)
     Descripcion = models.CharField(max_length=200,null=True,blank=True)
