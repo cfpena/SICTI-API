@@ -34,7 +34,8 @@ urlpatterns = [
     url(r'reporteprestamo', views.ReportePrestamo.as_view()),
     url(r'reporteexistenciapdf', views.ReporteExistenciasPDF.as_view()),
     url(r'reporteexistencia', views.ReporteExistencias.as_view()),
-    url(r'itemupload', views.ItemUploadViewSet.as_view())
+    url(r'itemupload', views.ItemUploadViewSet.as_view()),
+    url(r'devuelto', views.devueltoViewSet.as_view())
 ]
 
 

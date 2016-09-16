@@ -183,7 +183,7 @@ class ActaSerializer(serializers.HyperlinkedModelSerializer):
 class DevolucionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Devolucion
-        fields = '__all__'
+        fields = ('url','Fecha','Cantidad','Detalle','Prestamo')
 
 class FacturaIngresoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

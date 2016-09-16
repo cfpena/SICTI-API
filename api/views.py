@@ -166,7 +166,7 @@ class IngresoEgresoViewSet(viewsets.ModelViewSet):
 class ActaViewSet(viewsets.ModelViewSet):
     #filter_backends = (filters.SearchFilter,)
     #search_fields = ('Cedula,''Nombre','Apellido','Email','Telefono','Genero')
-    queryset = Acta.objects.all()
+    queryset = Acta.objects.all().order_by('Fecha')
     serializer_class = ActaSerializer
 
 class IdentificacionesViewSet(viewsets.ModelViewSet):
@@ -415,3 +415,19 @@ class ReporteExistenciasPDF(APIView):
         response.write(buff.getvalue())
         buff.close()
         return response
+
+class devueltoViewSet(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+
+        url = request.data['Acta']
+        query = Prestamo.objects.filter(Acta=str.split(str(url),'/')[5])
+        flag=True
+
+        for prestamo in query:
+            if not Devolucion.objects.filter(Prestamo=prestamo):
+                flag=False
+
+
+        return Response(flag)
