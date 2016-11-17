@@ -7,5 +7,6 @@ pygments
 django-cors-headers
 Pillow
 django-extensions
+django-tokenapi
 reportlab
 
